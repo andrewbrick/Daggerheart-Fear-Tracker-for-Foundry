@@ -87,14 +87,14 @@ Hooks.once("ready", () => {
   slider.style.backgroundImage = `url(${game.settings.get("daggerheart-fear-tracker", "sliderImage")})`;
   slider.style.backgroundSize = "contain";
   slider.style.backgroundRepeat = "no-repeat";
-  slider.style.width = "812px";
+  slider.style.width = "1072px";
   slider.style.height = "50px";
   slider.style.position = "relative";
   slider.style.display = "flex";
   slider.style.alignItems = "center";
   slider.style.pointerEvents = "auto";
 
-  const totalPips = 12;
+  const totalPips = 24;
   let leftSideCount = game.settings.get("daggerheart-fear-tracker", "leftSideCount");
 
   const pipInactive = game.settings.get("daggerheart-fear-tracker", "pipInactiveImage");
@@ -104,8 +104,7 @@ Hooks.once("ready", () => {
   const pipContainer = document.createElement("div");
   pipContainer.style.display = "flex";
   pipContainer.style.position = "absolute";
-  pipContainer.style.left = "50%";
-  pipContainer.style.transform = "translateX(-50%)";
+  pipContainer.style.left = "0";
   pipContainer.style.gap = "4px";
 
   for (let i = 0; i < totalPips; i++) {
@@ -164,35 +163,36 @@ Hooks.once("ready", () => {
   if (isGM) addGMControls();
 
   function addGMControls() {
-    const toggleButton = new Dialog({
-      title: "Toggle Slider Visibility",
-      content: "<p>Toggle slider bar for all users?</p>",
-      buttons: {
-        toggle: {
-          label: "Toggle",
-          callback: () => {
-            const current = game.settings.get("daggerheart-fear-tracker", "barVisible");
-            game.settings.set("daggerheart-fear-tracker", "barVisible", !current);
-            container.style.display = !current ? "flex" : "none";
-          }
-        },
-        close: {
-          label: "Close"
-        }
-      },
-      default: "close"
-    });
+    class ToggleOverlayMenu extends FormApplication {
+      static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+          title: "Toggle Slider Visibility",
+          id: "toggle-overlay-menu",
+          template: "templates/forms/default.html",
+          width: 400
+        });
+      }
+
+      getData() {
+        return {
+          isVisible: game.settings.get("daggerheart-fear-tracker", "barVisible")
+        };
+      }
+
+      async _updateObject(event, formData) {
+        const current = game.settings.get("daggerheart-fear-tracker", "barVisible");
+        await game.settings.set("daggerheart-fear-tracker", "barVisible", !current);
+        ui.notifications.info(`Slider visibility set to: ${!current}`);
+        location.reload();
+      }
+    }
 
     game.settings.registerMenu("daggerheart-fear-tracker", "toggleVisibility", {
       name: "Toggle Slider Overlay",
       label: "Toggle Visibility",
       hint: "GM only visibility toggle",
       icon: "fas fa-eye",
-      type: class {
-        static renderDialog() {
-          toggleButton.render(true);
-        }
-      },
+      type: ToggleOverlayMenu,
       restricted: true
     });
   }
