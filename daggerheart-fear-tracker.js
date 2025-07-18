@@ -82,6 +82,13 @@ Hooks.once("ready", () => {
 
   updatePosition();
 
+  const sliderWrapper = document.createElement("div");
+  sliderWrapper.style.display = "flex";
+  sliderWrapper.style.alignItems = "center";
+  sliderWrapper.style.gap = "20px";
+  sliderWrapper.style.position = "relative";
+  sliderWrapper.style.pointerEvents = "auto";
+
   const slider = document.createElement("div");
   slider.id = "slider-bar";
   slider.style.backgroundImage = `url(${game.settings.get("daggerheart-fear-tracker", "sliderImage")})`;
@@ -104,7 +111,7 @@ Hooks.once("ready", () => {
   const pipContainer = document.createElement("div");
   pipContainer.style.display = "flex";
   pipContainer.style.position = "absolute";
-  pipContainer.style.left = "0";
+  pipContainer.style.left = "50px";
   pipContainer.style.gap = "4px";
 
   for (let i = 0; i < totalPips; i++) {
@@ -118,9 +125,6 @@ Hooks.once("ready", () => {
   function updatePips(count) {
     leftSideCount = count;
     for (let i = 0; i < totalPips; i++) {
-      //if (i === 0) {
-      //  pips[i].src = pipInactive; // leftmost pip is always inactive
-      //} else 
       if (i < leftSideCount) {
         pips[i].src = pipInactive;
       } else {
@@ -130,15 +134,11 @@ Hooks.once("ready", () => {
   }
 
   updatePips(leftSideCount);
-
   slider.appendChild(pipContainer);
 
   const minus = document.createElement("img");
   minus.src = "modules/daggerheart-fear-tracker/images/minus.png";
   minus.style.width = minus.style.height = "30px";
-  minus.style.position = "absolute";
-  minus.style.left = "10px";
-  minus.style.zIndex = 1;
   minus.style.cursor = "pointer";
   minus.addEventListener("click", () => {
     if (!isGM || leftSideCount >= totalPips) return;
@@ -150,10 +150,7 @@ Hooks.once("ready", () => {
 
   const plus = document.createElement("img");
   plus.src = "modules/daggerheart-fear-tracker/images/plus.png";
-  plus.style.width = plus.style.height = "30px";
-  plus.style.position = "absolute";
-  plus.style.right = "10px";
-  plus.style.zIndex = 1;
+  plus.style.width = plus.style.height = "30pxpx";
   plus.style.cursor = "pointer";
   plus.addEventListener("click", () => {
     if (!isGM || leftSideCount <= 0) return;
@@ -163,10 +160,10 @@ Hooks.once("ready", () => {
     game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
   });
 
-  slider.appendChild(minus);
-  slider.appendChild(plus);
-
-  container.appendChild(slider);
+  sliderWrapper.appendChild(minus);
+  sliderWrapper.appendChild(slider);
+  sliderWrapper.appendChild(plus);
+  container.appendChild(sliderWrapper);
   document.body.appendChild(container);
 
   if (isGM) addGMControls();
