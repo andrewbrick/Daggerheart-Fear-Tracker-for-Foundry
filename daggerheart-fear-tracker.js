@@ -101,6 +101,8 @@ Hooks.once("ready", () => {
   slider.style.display = "flex";
   slider.style.alignItems = "center";
   slider.style.pointerEvents = "auto";
+  slider.style.top = "50%";
+  slider.style.transform = "translateY(-50%)";
 
   const totalPips = 12;
   let leftSideCount = game.settings.get("daggerheart-fear-tracker", "leftSideCount");
