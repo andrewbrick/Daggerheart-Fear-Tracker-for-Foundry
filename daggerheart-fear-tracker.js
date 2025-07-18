@@ -197,40 +197,7 @@ Hooks.once("ready", () => {
 
   if (isGM) addGMControls();
 
-  function addGMControls() {
-    class ToggleOverlayMenu extends FormApplication {
-      static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
-          title: "Toggle Slider Visibility",
-          id: "toggle-overlay-menu",
-          template: "templates/forms/default.html",
-          width: 400
-        });
-      }
 
-      getData() {
-        return {
-          isVisible: game.settings.get("daggerheart-fear-tracker", "barVisible")
-        };
-      }
-
-      async _updateObject(event, formData) {
-        const current = game.settings.get("daggerheart-fear-tracker", "barVisible");
-        await game.settings.set("daggerheart-fear-tracker", "barVisible", !current);
-        ui.notifications.info(`Slider visibility set to: ${!current}`);
-        location.reload();
-      }
-    }
-
-    game.settings.registerMenu("daggerheart-fear-tracker", "toggleVisibility", {
-      name: "Toggle Slider Overlay",
-      label: "Toggle Visibility",
-      hint: "GM only visibility toggle",
-      icon: "fas fa-eye",
-      type: ToggleOverlayMenu,
-      restricted: true
-    });
-  }
 
   function updatePosition() {
     container.style.top = game.settings.get("daggerheart-fear-tracker", "barPosition") === "top" ? "0" : "unset";
