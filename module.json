@@ -6,12 +6,12 @@
   "author": "Epic Name",
   "minimumCoreVersion": "12",
   "compatibleCoreVersion": "13",
-  "esmodules": ["script.js"],
+  "esmodules": ["daggerheart-fear-tracker.js"],
   "styles": [],
-  "scripts": [],
+  "scripts": ["daggerheart-fear-tracker.js"],
   "packs": [],
   "languages": [],
   "url": "https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/",
-  "manifest": "https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/module.json",
+  "manifest": "https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/blob/main/module.json",
   "download": "https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/daggerheart-fear-tracker.zip"
 }
