@@ -101,7 +101,6 @@ Hooks.once("ready", () => {
   slider.style.display = "flex";
   slider.style.alignItems = "center";
   slider.style.pointerEvents = "auto";
-  slider.style.marginTop = "50px";
 
   const totalPips = 12;
   let leftSideCount = game.settings.get("daggerheart-fear-tracker", "leftSideCount");
@@ -159,7 +158,14 @@ Hooks.once("ready", () => {
   }
 
   slider.appendChild(pipContainer);
-  sliderWrapper.appendChild(slider);
+  
+  //sliderWrapper.appendChild(slider);
+  const sliderBarWrapper = document.createElement("div");
+  sliderBarWrapper.style.position = "relative";  // or static
+  sliderBarWrapper.style.marginTop = "40px";     // push slider bar down
+  sliderBarWrapper.appendChild(slider);
+  sliderWrapper.appendChild(sliderBarWrapper);
+  
   container.appendChild(sliderWrapper);
   document.body.appendChild(container);
 
