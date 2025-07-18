@@ -118,7 +118,13 @@ Hooks.once("ready", () => {
   function updatePips(count) {
     leftSideCount = count;
     for (let i = 0; i < totalPips; i++) {
-      pips[i].src = i < leftSideCount ? pipInactive : pipActive;
+      if (i === 0) {
+        pips[i].src = pipInactive; // leftmost pip is always inactive
+      } else if (i < leftSideCount) {
+        pips[i].src = pipInactive;
+      } else {
+        pips[i].src = pipActive;
+      }
     }
   }
 
@@ -148,7 +154,7 @@ Hooks.once("ready", () => {
   plus.style.zIndex = 1;
   plus.style.cursor = "pointer";
   plus.addEventListener("click", () => {
-    if (!isGM || leftSideCount <= 0) return;
+    if (!isGM || leftSideCount <= 1) return;
     leftSideCount--;
     game.settings.set("daggerheart-fear-tracker", "leftSideCount", leftSideCount);
     game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
