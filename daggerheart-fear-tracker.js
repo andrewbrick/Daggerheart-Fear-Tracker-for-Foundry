@@ -185,19 +185,20 @@ Hooks.once("ready", () => {
       const pip = pips[i];
       const isActive = i >= leftSideCount;
   
-      // Set the image source
-      pip.src = isActive ? pipActive : pipInactive;
+      // Show/hide active and inactive images
+      pip.activeImg.style.opacity = isActive ? "1" : "0";
+      pip.inactiveImg.style.opacity = isActive ? "0" : "1";
   
-      // Optional animation
+      // Optional animation on wrapper
       if (animate) {
-        pip.style.transition = "transform 1s ease, opacity 1s ease";
+        pip.wrapper.style.transition = "transform 1s ease, opacity 1s ease";
       } else {
-        pip.style.transition = "none";
+        pip.wrapper.style.transition = "none";
       }
   
-      // Position pip based on state
-      pip.style.transform = `translateX(${isActive ? rightStart + spacing * (i - leftSideCount) : spacing * i}px)`;
-      pip.style.opacity = 1;
+      // Position pip wrapper based on state
+      pip.wrapper.style.transform = `translateX(${isActive ? rightStart + spacing * (i - leftSideCount) : spacing * i}px)`;
+      pip.wrapper.style.opacity = "1";
     }
   }
 
