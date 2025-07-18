@@ -118,9 +118,10 @@ Hooks.once("ready", () => {
   function updatePips(count) {
     leftSideCount = count;
     for (let i = 0; i < totalPips; i++) {
-      if (i === 0) {
-        pips[i].src = pipInactive; // leftmost pip is always inactive
-      } else if (i < leftSideCount) {
+      //if (i === 0) {
+      //  pips[i].src = pipInactive; // leftmost pip is always inactive
+      //} else 
+      if (i < leftSideCount) {
         pips[i].src = pipInactive;
       } else {
         pips[i].src = pipActive;
