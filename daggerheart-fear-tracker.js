@@ -125,7 +125,7 @@ Hooks.once("ready", () => {
     //pipWrapper.style.top = "50%";
     //pipWrapper.style.transform = "translateY(-50%)";
     pipWrapper.style.width = "30px";
-    pipWrapper.style.height = "30px";
+    pipWrapper.style.height = "40px";
     pipWrapper.style.transition = "left 1s ease";
 
     const inactiveImg = document.createElement("img");
