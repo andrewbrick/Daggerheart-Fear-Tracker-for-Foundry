@@ -115,8 +115,8 @@ Hooks.once("ready", () => {
   pipContainer.style.left = "0";
   pipContainer.style.width = "100%";
   pipContainer.style.height = "100%";
-  //pipContainer.style.display = "flex";
-  //pipContainer.style.alignItems = "center";
+  pipContainer.style.display = "flex";
+  pipContainer.style.alignItems = "center";
 
   for (let i = 0; i < totalPips; i++) {
     const pipWrapper = document.createElement("div");
