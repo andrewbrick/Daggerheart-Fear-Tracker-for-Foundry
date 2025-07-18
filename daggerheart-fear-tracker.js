@@ -150,7 +150,7 @@ Hooks.once("ready", () => {
 
   const plus = document.createElement("img");
   plus.src = "modules/daggerheart-fear-tracker/images/plus.png";
-  plus.style.width = plus.style.height = "30pxpx";
+  plus.style.width = plus.style.height = "30px";
   plus.style.cursor = "pointer";
   plus.addEventListener("click", () => {
     if (!isGM || leftSideCount <= 0) return;
