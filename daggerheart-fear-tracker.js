@@ -159,12 +159,12 @@ Hooks.once("ready", () => {
 
   slider.appendChild(pipContainer);
   
-  //sliderWrapper.appendChild(slider);
-  const sliderBarWrapper = document.createElement("div");
-  sliderBarWrapper.style.position = "relative";  // or static
-  sliderBarWrapper.style.marginTop = "40px";     // push slider bar down
-  sliderBarWrapper.appendChild(slider);
-  sliderWrapper.appendChild(sliderBarWrapper);
+  sliderWrapper.appendChild(slider);
+  //const sliderBarWrapper = document.createElement("div");
+  //sliderBarWrapper.style.position = "relative";  // or static
+  //sliderBarWrapper.style.marginTop = "40px";     // push slider bar down
+  //sliderBarWrapper.appendChild(slider);
+  //sliderWrapper.appendChild(sliderBarWrapper);
   
   container.appendChild(sliderWrapper);
   document.body.appendChild(container);
