@@ -71,7 +71,7 @@ Hooks.once("ready", () => {
   const isGM = game.user.isGM;
 
   const container = document.createElement("div");
-  container.id = "daggerheart-fear-tracker-container";
+  container.id = "slider-overlay-container";
   container.style.position = "fixed";
   container.style.left = "0";
   container.style.width = "100%";
@@ -143,6 +143,7 @@ Hooks.once("ready", () => {
     if (!isGM || leftSideCount >= totalPips) return;
     leftSideCount++;
     game.settings.set("daggerheart-fear-tracker", "leftSideCount", leftSideCount);
+    updatePips(leftSideCount);
     game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
   });
 
@@ -157,6 +158,7 @@ Hooks.once("ready", () => {
     if (!isGM || leftSideCount <= 0) return;
     leftSideCount--;
     game.settings.set("daggerheart-fear-tracker", "leftSideCount", leftSideCount);
+    updatePips(leftSideCount);
     game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
   });
 
