@@ -229,7 +229,7 @@ Hooks.once("ready", () => {
       async _updateObject(event, formData) {
         const current = game.settings.get("daggerheart-fear-tracker", "barVisible");
         await game.settings.set("daggerheart-fear-tracker", "barVisible", !current);
-        ui.notifications.info(`Slider visibility set to: ${!current}`);
+        ui.notifications.info('Slider visibility set to: ${!current}');
         location.reload();
       }
     }
