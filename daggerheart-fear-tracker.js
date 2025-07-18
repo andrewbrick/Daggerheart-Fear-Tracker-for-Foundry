@@ -68,19 +68,6 @@ Hooks.once("ready", () => {
     console.warn("Removing existing slider container to prevent duplication.");
     existing.remove();
   }
-  
-  game.socket.on("module.daggerheart-fear-tracker", (payload) => {
-    if (payload.type === "updatePips") {
-      updatePips(payload.leftSideCount);
-    }
-    if (payload.type === "toggleVisibility") {
-      const visible = game.settings.get("daggerheart-fear-tracker", "barVisible");
-      //container.style.display = visible ? "flex" : "none";
-      //sliderWrapper.style.opacity = visible ? "1" : "0";
-      //container.style.opacity = visible && game.user.isGM ? "1" : "0";
-      sliderWrapper.style.opacity = visible ? "1" : (game.user.isGM ? "0.5" : "0");
-    }
-  });
 
   const isGM = game.user.isGM;
 
@@ -123,10 +110,6 @@ Hooks.once("ready", () => {
 
   const pips = [];
   const pipContainer = document.createElement("div");
-  //pipContainer.style.display = "flex";
-  //pipContainer.style.position = "absolute";
-  //pipContainer.style.left = "10px";
-  //pipContainer.style.gap = "4px";
   pipContainer.style.position = "absolute";
   pipContainer.style.top = "0";
   pipContainer.style.left = "0";
@@ -137,11 +120,10 @@ Hooks.once("ready", () => {
     const pipWrapper = document.createElement("div");
     pipWrapper.style.position = "absolute";
     pipWrapper.style.top = "10px";
-    pipWrapper.style.left = `${i * 34}px`; // spacing between pips
     pipWrapper.style.width = "30px";
     pipWrapper.style.height = "30px";
     pipWrapper.style.transition = "left 1s ease";
-  
+
     const inactiveImg = document.createElement("img");
     inactiveImg.src = pipInactive;
     inactiveImg.style.position = "absolute";
@@ -153,7 +135,7 @@ Hooks.once("ready", () => {
     inactiveImg.style.outline = "none";
     inactiveImg.style.backgroundColor = "transparent";
     inactiveImg.style.display = "block";
-  
+
     const activeImg = document.createElement("img");
     activeImg.src = pipActive;
     activeImg.style.position = "absolute";
@@ -165,32 +147,46 @@ Hooks.once("ready", () => {
     activeImg.style.outline = "none";
     activeImg.style.backgroundColor = "transparent";
     activeImg.style.display = "block";
-  
+
     pipWrapper.appendChild(inactiveImg);
     pipWrapper.appendChild(activeImg);
     pipContainer.appendChild(pipWrapper);
     pips.push({ wrapper: pipWrapper, inactiveImg, activeImg });
   }
 
+  slider.appendChild(pipContainer);
+  sliderWrapper.appendChild(slider);
+  container.appendChild(sliderWrapper);
+  document.body.appendChild(container);
+
   function updatePips(count) {
     leftSideCount = count;
-      for (let i = 0; i < totalPips; i++) {
+    for (let i = 0; i < totalPips; i++) {
       const pip = pips[i];
       const isActive = i >= leftSideCount;
-  
       const targetIndex = isActive ? (i - leftSideCount) : i;
       const targetLeft = isActive
-        ? (slider.clientWidth - 30 - (targetIndex * 34)) // slide from right
-        : (targetIndex * 34); // slide from left
-  
+        ? (slider.clientWidth - 30 - (targetIndex * 34))
+        : (targetIndex * 34);
+
       pip.wrapper.style.left = `${targetLeft}px`;
       pip.inactiveImg.style.opacity = isActive ? "0" : "1";
       pip.activeImg.style.opacity = isActive ? "1" : "0";
     }
   }
 
-  updatePips(leftSideCount);
   slider.appendChild(pipContainer);
+  updatePips(leftSideCount);
+
+  game.socket.on("module.daggerheart-fear-tracker", (payload) => {
+    if (payload.type === "updatePips") {
+      updatePips(payload.leftSideCount);
+    }
+    if (payload.type === "toggleVisibility") {
+      const visible = game.settings.get("daggerheart-fear-tracker", "barVisible");
+      sliderWrapper.style.opacity = visible ? "1" : (game.user.isGM ? "0.5" : "0");
+    }
+  });
 
   const minus = document.createElement("img");
   minus.src = "modules/daggerheart-fear-tracker/images/minus.png";
