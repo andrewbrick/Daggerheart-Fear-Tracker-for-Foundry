@@ -222,14 +222,14 @@ Hooks.once("ready", () => {
       }
     }
 
-    game.settings.registerMenu("daggerheart-fear-tracker", "toggleVisibility", {
-      name: "Toggle Slider Overlay",
-      label: "Toggle Visibility",
-      hint: "GM only visibility toggle",
-      icon: "fas fa-eye",
-      type: ToggleOverlayMenu,
-      restricted: true
-    });
+    //game.settings.registerMenu("daggerheart-fear-tracker", "toggleVisibility", {
+    //  name: "Toggle Slider Overlay",
+    //  label: "Toggle Visibility",
+    //  hint: "GM only visibility toggle",
+    //  icon: "fas fa-eye",
+    //  type: ToggleOverlayMenu,
+    //  restricted: true
+    //});
   }
 
   function updatePosition() {
