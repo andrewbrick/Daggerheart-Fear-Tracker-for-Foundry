@@ -62,6 +62,13 @@ Hooks.once("init", () => {
 });
 
 Hooks.once("ready", () => {
+
+  const existing = document.getElementById("daggerheart-fear-tracker-container");
+  if (existing) {
+    console.warn("Removing existing slider container to prevent duplication.");
+    existing.remove();
+  }
+  
   game.socket.on("module.daggerheart-fear-tracker", (payload) => {
     if (payload.type === "updatePips") {
       updatePips(payload.leftSideCount);
