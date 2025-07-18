@@ -125,6 +125,10 @@ Hooks.once("ready", () => {
     const pip = document.createElement("img");
     pip.style.transition = "all 0.3s ease";
     pip.style.width = pip.style.height = "30px";
+    pip.style.border = "none";
+    pip.style.outline = "none";
+    pip.style.backgroundColor = "transparent";
+    pip.style.display = "block";
     pips.push(pip);
     pipContainer.appendChild(pip);
   }
@@ -148,6 +152,10 @@ Hooks.once("ready", () => {
   minus.style.width = "30px";
   minus.style.height = "30px";
   minus.style.flex = "0 0 auto";
+  minus.style.border = "none";
+  minus.style.outline = "none";
+  minus.style.backgroundColor = "transparent";
+  minus.style.display = "block";
   minus.style.cursor = "pointer";
   minus.addEventListener("click", () => {
     if (!isGM || leftSideCount >= totalPips) return;
@@ -162,6 +170,10 @@ Hooks.once("ready", () => {
   plus.style.width = "30px";
   plus.style.height = "30px";
   plus.style.flex = "0 0 auto";
+  plus.style.border = "none";
+  plus.style.outline = "none";
+  plus.style.backgroundColor = "transparent";
+  plus.style.display = "block";
   plus.style.cursor = "pointer";
   plus.addEventListener("click", () => {
     if (!isGM || leftSideCount <= 0) return;
