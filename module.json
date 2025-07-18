@@ -1,0 +1,17 @@
+{
+  "name": "daggerheart-fear-tracker",
+  "title": "Daggerheart Fear Tracker",
+  "description": "Adds a GM-controlled, animated slider bar with configurable fear tokens to the UI (including player UIs). Fully responsive and customizable via settings.",
+  "version": "1.0.0",
+  "author": "Epic Name",
+  "minimumCoreVersion": "12",
+  "compatibleCoreVersion": "13",
+  "esmodules": ["script.js"],
+  "styles": [],
+  "scripts": [],
+  "packs": [],
+  "languages": [],
+  "url": "https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/here",
+  "manifest": "https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/module.json",
+  "download": "https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/here/daggerheart-fear-tracker.zip"
+}
