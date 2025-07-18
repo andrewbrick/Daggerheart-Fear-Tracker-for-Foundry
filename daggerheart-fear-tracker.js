@@ -207,16 +207,6 @@ Hooks.once("ready", () => {
   container.appendChild(sliderWrapper);
   document.body.appendChild(container);
 
-  // Attempt to remove black lines around images
-  const style = document.createElement("style");
-  style.textContent = '
-    #daggerheart-fear-tracker-container img {
-      outline: none !important;
-      border: none !important;
-      box-shadow: none !important;
-  }';
-  document.head.appendChild(style);
-
   if (isGM) addGMControls();
 
   function addGMControls() {
