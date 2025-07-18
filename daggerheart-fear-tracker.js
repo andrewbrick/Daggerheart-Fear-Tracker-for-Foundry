@@ -161,14 +161,22 @@ Hooks.once("ready", () => {
 
   function updatePips(count) {
     leftSideCount = count;
+    const activeCount = totalPips - leftSideCount;
+  
     for (let i = 0; i < totalPips; i++) {
       const pip = pips[i];
       const isActive = i >= leftSideCount;
-      const targetIndex = isActive ? (i - leftSideCount) : i;
-      const targetLeft = isActive
-        ? (slider.clientWidth - 30 - (targetIndex * 34))
-        : (targetIndex * 34);
-
+      let targetLeft;
+  
+      if (isActive) {
+        const activeIndex = i - leftSideCount;
+        // Active pips start from (slider width - activeCount * spacing)
+        const startX = slider.clientWidth - (activeCount * 34);
+        targetLeft = startX + (activeIndex * 34);
+      } else {
+        targetLeft = i * 34;
+      }
+  
       pip.wrapper.style.left = `${targetLeft}px`;
       pip.inactiveImg.style.opacity = isActive ? "0" : "1";
       pip.activeImg.style.opacity = isActive ? "1" : "0";
