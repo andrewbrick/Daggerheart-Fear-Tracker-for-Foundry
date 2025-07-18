@@ -116,31 +116,69 @@ Hooks.once("ready", () => {
 
   const pips = [];
   const pipContainer = document.createElement("div");
-  pipContainer.style.display = "flex";
+  //pipContainer.style.display = "flex";
+  //pipContainer.style.position = "absolute";
+  //pipContainer.style.left = "10px";
+  //pipContainer.style.gap = "4px";
   pipContainer.style.position = "absolute";
-  pipContainer.style.left = "10px";
-  pipContainer.style.gap = "4px";
+  pipContainer.style.top = "0";
+  pipContainer.style.left = "0";
+  pipContainer.style.width = "100%";
+  pipContainer.style.height = "100%";
 
   for (let i = 0; i < totalPips; i++) {
-    const pip = document.createElement("img");
-    pip.style.transition = "all 0.3s ease";
-    pip.style.width = pip.style.height = "30px";
-    pip.style.border = "none";
-    pip.style.outline = "none";
-    pip.style.backgroundColor = "transparent";
-    pip.style.display = "block";
-    pips.push(pip);
-    pipContainer.appendChild(pip);
+    const pipWrapper = document.createElement("div");
+    pipWrapper.style.position = "absolute";
+    pipWrapper.style.top = "10px";
+    pipWrapper.style.left = `${i * 34}px`; // spacing between pips
+    pipWrapper.style.width = "30px";
+    pipWrapper.style.height = "30px";
+    pipWrapper.style.transition = "left 1s ease";
+  
+    const inactiveImg = document.createElement("img");
+    inactiveImg.src = pipInactive;
+    inactiveImg.style.position = "absolute";
+    inactiveImg.style.width = "30px";
+    inactiveImg.style.height = "30px";
+    inactiveImg.style.transition = "opacity 1s ease";
+    inactiveImg.style.opacity = "1";
+    inactiveImg.style.border = "none";
+    inactiveImg.style.outline = "none";
+    inactiveImg.style.backgroundColor = "transparent";
+    inactiveImg.style.display = "block";
+  
+    const activeImg = document.createElement("img");
+    activeImg.src = pipActive;
+    activeImg.style.position = "absolute";
+    activeImg.style.width = "30px";
+    activeImg.style.height = "30px";
+    activeImg.style.transition = "opacity 1s ease";
+    activeImg.style.opacity = "0";
+    activeImg.style.border = "none";
+    activeImg.style.outline = "none";
+    activeImg.style.backgroundColor = "transparent";
+    activeImg.style.display = "block";
+  
+    pipWrapper.appendChild(inactiveImg);
+    pipWrapper.appendChild(activeImg);
+    pipContainer.appendChild(pipWrapper);
+    pips.push({ wrapper: pipWrapper, inactiveImg, activeImg });
   }
 
   function updatePips(count) {
     leftSideCount = count;
-    for (let i = 0; i < totalPips; i++) {
-      if (i < leftSideCount) {
-        pips[i].src = pipInactive;
-      } else {
-        pips[i].src = pipActive;
-      }
+      for (let i = 0; i < totalPips; i++) {
+      const pip = pips[i];
+      const isActive = i >= leftSideCount;
+  
+      const targetIndex = isActive ? (i - leftSideCount) : i;
+      const targetLeft = isActive
+        ? (slider.clientWidth - 30 - (targetIndex * 34)) // slide from right
+        : (targetIndex * 34); // slide from left
+  
+      pip.wrapper.style.left = `${targetLeft}px`;
+      pip.inactiveImg.style.opacity = isActive ? "0" : "1";
+      pip.activeImg.style.opacity = isActive ? "1" : "0";
     }
   }
 
