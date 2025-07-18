@@ -66,6 +66,13 @@ Hooks.once("ready", () => {
     if (payload.type === "updatePips") {
       updatePips(payload.leftSideCount);
     }
+    if (payload.type === "toggleVisibility") {
+      const visible = game.settings.get("daggerheart-fear-tracker", "barVisible");
+      //container.style.display = visible ? "flex" : "none";
+      //sliderWrapper.style.opacity = visible ? "1" : "0";
+      //container.style.opacity = visible && game.user.isGM ? "1" : "0";
+      sliderWrapper.style.opacity = visible ? "1" : (game.user.isGM ? "0.5" : "0");
+    }
   });
 
   const isGM = game.user.isGM;
@@ -164,9 +171,27 @@ Hooks.once("ready", () => {
     game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
   });
 
+  const eye = document.createElement("i");
+  eye.className = "fas fa-eye";
+  eye.style.cursor = "pointer";
+  eye.style.fontSize = "24px";
+  eye.style.color = "white";
+  eye.style.marginLeft = "8px";
+  eye.style.flex = "0 0 auto";
+  eye.addEventListener("click", () => {
+    if (!isGM) return;
+    const current = game.settings.get("daggerheart-fear-tracker", "barVisible");
+    const newState = !current;
+    game.settings.set("daggerheart-fear-tracker", "barVisible", newState);
+    sliderWrapper.style.opacity = newState ? "1" : "0.5";
+    eye.className = newState ? "fas fa-eye" : "fas fa-eye-slash";
+    game.socket.emit("module.daggerheart-fear-tracker", { type: "toggleVisibility" });
+  });
+
   sliderWrapper.appendChild(minus);
   sliderWrapper.appendChild(slider);
   sliderWrapper.appendChild(plus);
+  if (isGM) sliderWrapper.appendChild(eye);
   container.appendChild(sliderWrapper);
   document.body.appendChild(container);
 
