@@ -1,5 +1,5 @@
 /*
-Module: Daggerheart Fear Tracker
+Module: Animated Slider Bar Overlay
 Compatible with: Foundry VTT v12 and v13
 */
 
@@ -19,7 +19,7 @@ Hooks.once("init", () => {
     scope: "world",
     config: true,
     type: String,
-    default: "modules/sdaggerheart-fear-tracker/images/pip-active.png"
+    default: "modules/daggerheart-fear-tracker/images/pip-active.png"
   });
 
   game.settings.register("daggerheart-fear-tracker", "pipInactiveImage", {
@@ -71,7 +71,7 @@ Hooks.once("ready", () => {
   const isGM = game.user.isGM;
 
   const container = document.createElement("div");
-  container.id = "daggerheart-fear-tracker-container";
+  container.id = "slider-overlay-container";
   container.style.position = "fixed";
   container.style.left = "0";
   container.style.width = "100%";
@@ -87,7 +87,7 @@ Hooks.once("ready", () => {
   slider.style.backgroundImage = `url(${game.settings.get("daggerheart-fear-tracker", "sliderImage")})`;
   slider.style.backgroundSize = "contain";
   slider.style.backgroundRepeat = "no-repeat";
-  slider.style.width = "800px";
+  slider.style.width = "812px";
   slider.style.height = "50px";
   slider.style.position = "relative";
   slider.style.display = "flex";
@@ -104,7 +104,8 @@ Hooks.once("ready", () => {
   const pipContainer = document.createElement("div");
   pipContainer.style.display = "flex";
   pipContainer.style.position = "absolute";
-  pipContainer.style.left = "50px";
+  pipContainer.style.left = "50%";
+  pipContainer.style.transform = "translateX(-50%)";
   pipContainer.style.gap = "4px";
 
   for (let i = 0; i < totalPips; i++) {
@@ -129,7 +130,9 @@ Hooks.once("ready", () => {
   const minus = document.createElement("img");
   minus.src = "modules/daggerheart-fear-tracker/images/minus.png";
   minus.style.width = minus.style.height = "30px";
-  minus.style.marginRight = "10px";
+  minus.style.position = "absolute";
+  minus.style.left = "10px";
+  minus.style.zIndex = 1;
   minus.style.cursor = "pointer";
   minus.addEventListener("click", () => {
     if (!isGM || leftSideCount >= totalPips) return;
@@ -141,7 +144,9 @@ Hooks.once("ready", () => {
   const plus = document.createElement("img");
   plus.src = "modules/daggerheart-fear-tracker/images/plus.png";
   plus.style.width = plus.style.height = "30px";
-  plus.style.marginLeft = "10px";
+  plus.style.position = "absolute";
+  plus.style.right = "10px";
+  plus.style.zIndex = 1;
   plus.style.cursor = "pointer";
   plus.addEventListener("click", () => {
     if (!isGM || leftSideCount <= 0) return;
@@ -150,7 +155,7 @@ Hooks.once("ready", () => {
     game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
   });
 
-  slider.prepend(minus);
+  slider.appendChild(minus);
   slider.appendChild(plus);
 
   container.appendChild(slider);
