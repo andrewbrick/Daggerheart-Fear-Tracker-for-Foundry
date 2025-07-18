@@ -111,7 +111,7 @@ Hooks.once("ready", () => {
   const pipContainer = document.createElement("div");
   pipContainer.style.display = "flex";
   pipContainer.style.position = "absolute";
-  pipContainer.style.left = "50px";
+  pipContainer.style.left = "10px";
   pipContainer.style.gap = "4px";
 
   for (let i = 0; i < totalPips; i++) {
