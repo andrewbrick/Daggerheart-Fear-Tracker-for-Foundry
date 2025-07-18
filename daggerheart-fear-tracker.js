@@ -69,8 +69,6 @@ Hooks.once("ready", () => {
     existing.remove();
   }
   
-  //updatePips(leftSideCount, false); // no animation
-  
   game.socket.on("module.daggerheart-fear-tracker", (payload) => {
     if (payload.type === "updatePips") {
       updatePips(payload.leftSideCount);
@@ -174,35 +172,24 @@ Hooks.once("ready", () => {
     pips.push({ wrapper: pipWrapper, inactiveImg, activeImg });
   }
 
-  function updatePips(count, animate = false) {
+  function updatePips(count) {
     leftSideCount = count;
-  
-    const activeCount = totalPips - leftSideCount;
-    const spacing = 34; // 30px pip + 4px gap
-    const rightStart = spacing * (totalPips - activeCount); // offset from left
-  
-    for (let i = 0; i < totalPips; i++) {
+      for (let i = 0; i < totalPips; i++) {
       const pip = pips[i];
       const isActive = i >= leftSideCount;
   
-      // Show/hide active and inactive images
-      pip.activeImg.style.opacity = isActive ? "1" : "0";
+      const targetIndex = isActive ? (i - leftSideCount) : i;
+      const targetLeft = isActive
+        ? (slider.clientWidth - 30 - (targetIndex * 34)) // slide from right
+        : (targetIndex * 34); // slide from left
+  
+      pip.wrapper.style.left = `${targetLeft}px`;
       pip.inactiveImg.style.opacity = isActive ? "0" : "1";
-  
-      // Optional animation on wrapper
-      if (animate) {
-        pip.wrapper.style.transition = "transform 1s ease, opacity 1s ease";
-      } else {
-        pip.wrapper.style.transition = "none";
-      }
-  
-      // Position pip wrapper based on state
-      pip.wrapper.style.transform = `translateX(${isActive ? rightStart + spacing * (i - leftSideCount) : spacing * i}px)`;
-      pip.wrapper.style.opacity = "1";
+      pip.activeImg.style.opacity = isActive ? "1" : "0";
     }
   }
 
-  updatePips(leftSideCount, false);
+  updatePips(leftSideCount);
   slider.appendChild(pipContainer);
 
   const minus = document.createElement("img");
@@ -219,7 +206,7 @@ Hooks.once("ready", () => {
     if (!isGM || leftSideCount >= totalPips) return;
     leftSideCount++;
     game.settings.set("daggerheart-fear-tracker", "leftSideCount", leftSideCount);
-    updatePips(leftSideCount, true);
+    updatePips(leftSideCount);
     game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
   });
 
@@ -237,7 +224,7 @@ Hooks.once("ready", () => {
     if (!isGM || leftSideCount <= 0) return;
     leftSideCount--;
     game.settings.set("daggerheart-fear-tracker", "leftSideCount", leftSideCount);
-    updatePips(leftSideCount, true);
+    updatePips(leftSideCount);
     game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
   });
 
