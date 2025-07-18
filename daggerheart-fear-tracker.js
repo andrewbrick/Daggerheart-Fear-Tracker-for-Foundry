@@ -22,7 +22,7 @@ Hooks.once("init", () => {
     default: "modules/sdaggerheart-fear-tracker/images/pip-active.png"
   });
 
-  game.settings.register("sdaggerheart-fear-tracker", "pipInactiveImage", {
+  game.settings.register("daggerheart-fear-tracker", "pipInactiveImage", {
     name: "Deactivated Pip Image",
     hint: "Path to the deactivated pip PNG image.",
     scope: "world",
