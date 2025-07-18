@@ -138,7 +138,8 @@ Hooks.once("ready", () => {
 
   const minus = document.createElement("img");
   minus.src = "modules/daggerheart-fear-tracker/images/minus.png";
-  minus.style.width = minus.style.height = "30px";
+  minus.style.width = "30px";
+  minus.style.height = "30px";
   minus.style.cursor = "pointer";
   minus.addEventListener("click", () => {
     if (!isGM || leftSideCount >= totalPips) return;
@@ -150,7 +151,8 @@ Hooks.once("ready", () => {
 
   const plus = document.createElement("img");
   plus.src = "modules/daggerheart-fear-tracker/images/plus.png";
-  plus.style.width = plus.style.height = "30px";
+  plus.style.width = "30px";
+  plus.style.height = "30px";
   plus.style.cursor = "pointer";
   plus.addEventListener("click", () => {
     if (!isGM || leftSideCount <= 0) return;
