@@ -71,7 +71,7 @@ Hooks.once("ready", () => {
   const isGM = game.user.isGM;
 
   const container = document.createElement("div");
-  container.id = "slider-overlay-container";
+  container.id = "daggerheart-fear-tracker-container";
   container.style.position = "fixed";
   container.style.left = "0";
   container.style.width = "100%";
