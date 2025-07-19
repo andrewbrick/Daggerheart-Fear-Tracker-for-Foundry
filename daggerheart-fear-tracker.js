@@ -3,10 +3,9 @@ Module: Animated Slider Bar Overlay
 Compatible with: Foundry VTT v12 and v13
 */
 
-
 Hooks.once("init", () => {
 
-  // Config setup
+  // Setting registration / Config setup
   game.settings.register("daggerheart-fear-tracker", "sliderImage", {
     name: "Slider Bar Image",
     hint: "Path to the slider bar PNG image (1000 x 30).",
@@ -94,6 +93,7 @@ Hooks.once("init", () => {
 
 let container = null;
 
+// Function to update the slider bar's position w/o restart
 function updatePosition() {
   const position = game.settings.get("daggerheart-fear-tracker", "barPosition");
   if (!container) return;
@@ -107,17 +107,6 @@ function updatePosition() {
 Hooks.on("closeSettingsConfig", () => {
   updatePosition();
 });
-
-// Socket registration
-//Hooks.once("init", () => {
-//  console.log("Socket registration");
-//  game.modules.get("daggerheart-fear-tracker").socket = socketlib.registerModule("daggerheart-fear-tracker");
-//});
-
-//function getModuleImagePath(filename) {
-//  const module = game.modules.get("daggerheart-fear-tracker");
-//  return module ? `${game.modules.get("daggerheart-fear-tracker").url}/images/${filename}` : `modules/daggerheart-fear-tracker/image/${filename}`;
-//}
 
 Hooks.once("ready", () => {
 
@@ -139,19 +128,14 @@ Hooks.once("ready", () => {
     if (payload.type === "toggleVisibility") {
       const visible = game.settings.get("daggerheart-fear-tracker", "barVisible");
       //console.log("Setting visibility when slider value is", visible);
-      sliderWrapper.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
+      container.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
     }
   });
-
-  // Image path setting
-  //game.settings.set("daggerheart-fear-tracker", "sliderImage", getModuleImagePath("slider.png"));
-  //game.settings.set("daggerheart-fear-tracker", "pipActiveImage", getModuleImagePath("pip-active.png"));
-  //game.settings.set("daggerheart-fear-tracker", "pipInactiveImage", getModuleImagePath("pip-inactive.png"));
 
   // Testing
   //console.log("Fear tracker ready on ", game.user.name);
 
-  // Create mother container
+  // Create mother container and element containers
   container = document.createElement("div");
   container.id = "daggerheart-fear-tracker-container";
   container.style.position = "fixed";
@@ -159,9 +143,10 @@ Hooks.once("ready", () => {
   container.style.width = "100%";
   container.style.zIndex = 100;
   container.style.marginTop = "40px";
-  container.style.display = game.settings.get("daggerheart-fear-tracker", "barVisible") ? "flex" : "none";
+  container.style.display = "flex"; //game.settings.get("daggerheart-fear-tracker", "barVisible") ? "flex" : "none";
   container.style.justifyContent = "center";
   container.style.pointerEvents = "none";
+  container.style.opacity = game.settings.get("daggerheart-fear-tracker", "barVisible") ? "1" : (isGM ? "0.5" : "0");
 
   //console.log("Ready to call updatePosition for the first time for ", game.user.name);
   updatePosition();
@@ -176,7 +161,6 @@ Hooks.once("ready", () => {
   const slider = document.createElement("div");
   slider.id = "slider-bar";
   slider.style.backgroundImage = `url(${game.settings.get("daggerheart-fear-tracker", "sliderImage")})`;
-  //slider.style.backgroundImage = '${basePath}/images/slider.png';
   slider.style.backgroundSize = "contain";
   slider.style.backgroundRepeat = "no-repeat";
   slider.style.width = "1000px"; //1072
@@ -185,8 +169,6 @@ Hooks.once("ready", () => {
   slider.style.marginRight = "-15px";
   slider.style.position = "relative";
   slider.style.display = "flex";
-  //slider.style.alignItems = "center";
-  //slider.style.pointerEvents = "auto";
 
   //const totalPips = 12;
   const totalPips = game.settings.get("daggerheart-fear-tracker", "maxFearTokens");
@@ -209,8 +191,6 @@ Hooks.once("ready", () => {
     const pipWrapper = document.createElement("div");
     pipWrapper.style.position = "absolute";
     pipWrapper.style.top = "10px";
-    //pipWrapper.style.top = "50%";
-    //pipWrapper.style.transform = "translateY(-50%)";
     pipWrapper.style.width = "23px";
     pipWrapper.style.height = "30px";
     pipWrapper.style.transition = "left 1s ease";
@@ -239,7 +219,6 @@ Hooks.once("ready", () => {
     activeImg.style.backgroundColor = "transparent";
     activeImg.style.display = "block";
     activeImg.style.filter = "drop-shadow(0 0 6px rgba(253, 219, 82, 0.9))";
-    //activeImg.classList.add("pip-pulse");
 
     pipWrapper.appendChild(inactiveImg);
     pipWrapper.appendChild(activeImg);
@@ -247,18 +226,13 @@ Hooks.once("ready", () => {
     pips.push({ wrapper: pipWrapper, inactiveImg, activeImg });
   }
 
+  // News team: assemble!
   slider.appendChild(pipContainer);
-  
   sliderWrapper.appendChild(slider);
-  //const sliderBarWrapper = document.createElement("div");
-  //sliderBarWrapper.style.position = "relative";  // or static
-  //sliderBarWrapper.style.marginTop = "40px";     // push slider bar down
-  //sliderBarWrapper.appendChild(slider);
-  //sliderWrapper.appendChild(sliderBarWrapper);
-  
   container.appendChild(sliderWrapper);
   document.body.appendChild(container);
 
+  // Function to update token position when GM clicks + and - buttons
   function updatePips(count) {
     //console.log("updatePips called for user ", game.user.name);
     leftSideCount = count;
@@ -287,7 +261,7 @@ Hooks.once("ready", () => {
   slider.appendChild(pipContainer);
   updatePips(leftSideCount);
 
-  // Add plus and minus buttons
+  // Add plus and minus buttons (GM only)
   const minus = document.createElement("img");
   minus.src = "modules/daggerheart-fear-tracker/images/minus.png";
   minus.style.width = "30px";
@@ -324,8 +298,9 @@ Hooks.once("ready", () => {
     game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
   });
 
+  // Add visibility toggle button (GM only)
   const eye = document.createElement("i");
-  eye.className = "fas fa-eye";
+  eye.className = game.settings.get("daggerheart-fear-tracker", "barVisible") ? "fas fa-eye" : "fas fa-eye-slash";
   eye.style.cursor = "pointer";
   eye.style.fontSize = "24px";
   eye.style.color = "white";
@@ -337,44 +312,18 @@ Hooks.once("ready", () => {
     const newState = !current;
     //console.log("slider was ", current, ". Just set to ", newState);
     game.settings.set("daggerheart-fear-tracker", "barVisible", newState);
-    sliderWrapper.style.opacity = newState ? "1" : "0.5";
+    //sliderWrapper.style.opacity = newState ? "1" : "0.5";
+    container.style.opacity = newState ? "1" : "0.5";
     eye.className = newState ? "fas fa-eye" : "fas fa-eye-slash";
     game.socket.emit("module.daggerheart-fear-tracker", { type: "toggleVisibility" });
   });
 
+  // Populate everything
   if (isGM) sliderWrapper.appendChild(minus);
   sliderWrapper.appendChild(slider);
   if (isGM) sliderWrapper.appendChild(plus);
   if (isGM) sliderWrapper.appendChild(eye);
   container.appendChild(sliderWrapper);
   document.body.appendChild(container);
-
-  if (isGM) addGMControls();
-
-  function addGMControls() {
-    class ToggleOverlayMenu extends FormApplication {
-      static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
-          title: "Toggle Slider Visibility",
-          id: "toggle-overlay-menu",
-          template: "templates/forms/default.html",
-          width: 400
-        });
-      }
-
-      getData() {
-        return {
-          isVisible: game.settings.get("daggerheart-fear-tracker", "barVisible")
-        };
-      }
-
-      async _updateObject(event, formData) {
-        const current = game.settings.get("daggerheart-fear-tracker", "barVisible");
-        await game.settings.set("daggerheart-fear-tracker", "barVisible", !current);
-        ui.notifications.info('Slider visibility set to: ${!current}');
-        location.reload();
-      }
-    }
-  }
 
 });
