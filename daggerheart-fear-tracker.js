@@ -13,6 +13,7 @@ Hooks.once("init", () => {
     scope: "world",
     config: true,
     type: String,
+    filePicker: "image",
     default: "modules/daggerheart-fear-tracker/images/slider.png"
   });
 
@@ -22,6 +23,7 @@ Hooks.once("init", () => {
     scope: "world",
     config: true,
     type: String,
+    filePicker: "image",
     default: "modules/daggerheart-fear-tracker/images/pip-active.png"
   });
 
@@ -31,6 +33,7 @@ Hooks.once("init", () => {
     scope: "world",
     config: true,
     type: String,
+    filePicker: "image",
     default: "modules/daggerheart-fear-tracker/images/pip-inactive.png"
   });
 
@@ -111,6 +114,11 @@ Hooks.on("closeSettingsConfig", () => {
 //  game.modules.get("daggerheart-fear-tracker").socket = socketlib.registerModule("daggerheart-fear-tracker");
 //});
 
+//function getModuleImagePath(filename) {
+//  const module = game.modules.get("daggerheart-fear-tracker");
+//  return module ? `${game.modules.get("daggerheart-fear-tracker").url}/images/${filename}` : `modules/daggerheart-fear-tracker/image/${filename}`;
+//}
+
 Hooks.once("ready", () => {
 
   const isGM = game.user.isGM;
@@ -124,16 +132,21 @@ Hooks.once("ready", () => {
 
   // Listener for updates
   game.socket.on("module.daggerheart-fear-tracker", (payload) => {
-    console.log("game.socket.on called for ", game.user.name);
+    //console.log("game.socket.on called for ", game.user.name);
     if (payload.type === "updatePips") {
       updatePips(payload.leftSideCount);
     }
     if (payload.type === "toggleVisibility") {
       const visible = game.settings.get("daggerheart-fear-tracker", "barVisible");
-      console.log("Setting visibility when slider value is", visible);
+      //console.log("Setting visibility when slider value is", visible);
       sliderWrapper.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
     }
   });
+
+  // Image path setting
+  //game.settings.set("daggerheart-fear-tracker", "sliderImage", getModuleImagePath("slider.png"));
+  //game.settings.set("daggerheart-fear-tracker", "pipActiveImage", getModuleImagePath("pip-active.png"));
+  //game.settings.set("daggerheart-fear-tracker", "pipInactiveImage", getModuleImagePath("pip-inactive.png"));
 
   // Testing
   //console.log("Fear tracker ready on ", game.user.name);
@@ -163,6 +176,7 @@ Hooks.once("ready", () => {
   const slider = document.createElement("div");
   slider.id = "slider-bar";
   slider.style.backgroundImage = `url(${game.settings.get("daggerheart-fear-tracker", "sliderImage")})`;
+  //slider.style.backgroundImage = '${basePath}/images/slider.png';
   slider.style.backgroundSize = "contain";
   slider.style.backgroundRepeat = "no-repeat";
   slider.style.width = "1000px"; //1072
@@ -321,7 +335,7 @@ Hooks.once("ready", () => {
     if (!isGM) return;
     const current = game.settings.get("daggerheart-fear-tracker", "barVisible");
     const newState = !current;
-    console.log("slider was ", current, ". Just set to ", newState);
+    //console.log("slider was ", current, ". Just set to ", newState);
     game.settings.set("daggerheart-fear-tracker", "barVisible", newState);
     sliderWrapper.style.opacity = newState ? "1" : "0.5";
     eye.className = newState ? "fas fa-eye" : "fas fa-eye-slash";
