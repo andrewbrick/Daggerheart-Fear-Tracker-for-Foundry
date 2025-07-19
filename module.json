@@ -20,7 +20,7 @@
     {
       "name": "socketlib",
       "type": "module",
-      "manifest: "https://github.com/manuelVo/foundryvtt-socketlib/releases/latest/download/module.json" 
+      "manifest": "https://github.com/manuelVo/foundryvtt-socketlib/releases/latest/download/module.json" 
     }
   ]
 }
