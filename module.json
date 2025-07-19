@@ -3,9 +3,11 @@
   "title": "Daggerheart Fear Tracker",
   "description": "Adds a GM-controlled, animated slider bar with configurable fear tokens to the UI (including player UIs). Fully responsive and customizable via settings.",
   "version": "0.1.31b",
-  "author": "Epic Name",
-  "minimumCoreVersion": "12",
-  "compatibleCoreVersion": "13",
+  //"author": "Epic Name",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "12"
+  }
   "styles": [],
   "scripts": ["daggerheart-fear-tracker.js"],
   "esmodules": [],
