@@ -71,7 +71,7 @@ Hooks.once("init", () => {
   // Option to change the number of fear tokens
   game.settings.register("daggerheart-fear-tracker", "maxFearTokens", {
     name: "Maximum number of fear tokens",
-    hint: "This determines how many total tokens appear in the slider. When you change this, the number of inactive (gray) tokens remains constant (fear tokens will be added or subtracted. RESTART REQURIED.",
+    hint: "This determines how many total tokens appear in the slider. Changing the number will reset the slider bar. RESTART REQURIED.",
     scope: "world",
     config: true,
     default: 12,
@@ -82,6 +82,7 @@ Hooks.once("init", () => {
       step: 1,
     },
     onChange: () => {
+      game.settings.set("daggerheart-fear-tracker", "leftSideCount", game.settings.get("daggerheart-fear-tracker", "maxFearTokens")),
       window.location.reload(); // easiest way to re-render the slider correctly
     },
   });
