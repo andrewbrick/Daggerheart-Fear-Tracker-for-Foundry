@@ -8,6 +8,7 @@
   "compatibleCoreVersion": "13",
   "styles": [],
   "scripts": ["daggerheart-fear-tracker.js"],
+  "esmodules": [],
   "packs": [],
   "languages": [],
   "url": "https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/",
