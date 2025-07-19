@@ -3,10 +3,13 @@ Module: Animated Slider Bar Overlay
 Compatible with: Foundry VTT v12 and v13
 */
 
+
 Hooks.once("init", () => {
+
+  // Config setup
   game.settings.register("daggerheart-fear-tracker", "sliderImage", {
     name: "Slider Bar Image",
-    hint: "Path to the slider bar PNG image.",
+    hint: "Path to the slider bar PNG image (1000 x 30).",
     scope: "world",
     config: true,
     type: String,
@@ -15,7 +18,7 @@ Hooks.once("init", () => {
 
   game.settings.register("daggerheart-fear-tracker", "pipActiveImage", {
     name: "Activated Pip Image",
-    hint: "Path to the activated pip PNG image.",
+    hint: "Path to the activated pip PNG image (300 x 457).",
     scope: "world",
     config: true,
     type: String,
@@ -24,7 +27,7 @@ Hooks.once("init", () => {
 
   game.settings.register("daggerheart-fear-tracker", "pipInactiveImage", {
     name: "Deactivated Pip Image",
-    hint: "Path to the deactivated pip PNG image.",
+    hint: "Path to the deactivated pip PNG image. (300 x 457)",
     scope: "world",
     config: true,
     type: String,
@@ -42,11 +45,12 @@ Hooks.once("init", () => {
       "bottom": "Bottom"
     },
     default: "bottom",
-    //onChange: () => {
-    //  updatePosition();
-    //}
+    onChange: () => {
+      updatePosition();
+    }
   });
 
+  // Slider visibility
   game.settings.register("daggerheart-fear-tracker", "barVisible", {
     name: "Slider Bar Visible",
     scope: "world",
@@ -55,6 +59,7 @@ Hooks.once("init", () => {
     default: true
   });
 
+  // Init for pip counter
   game.settings.register("daggerheart-fear-tracker", "leftSideCount", {
     name: "Pip Count Left Side",
     scope: "world",
@@ -62,10 +67,46 @@ Hooks.once("init", () => {
     type: Number,
     default: 12
   });
+
+  // Option to change the number of fear tokens
+  game.settings.register("daggerheart-fear-tracker", "maxFearTokens", {
+    name: "Maximum number of fear tokens",
+    hint: "This determines how many total tokens appear in the slider. When you change this, the number of inactive (gray) tokens remains constant (fear tokens will be added or subtracted. RESTART REQURIED.",
+    scope: "world",
+    config: true,
+    default: 12,
+    type: Number,
+    range: {
+      min: 1,
+      max: 30,
+      step: 1,
+    },
+    onChange: () => {
+      window.location.reload(); // easiest way to re-render the slider correctly
+    },
+  });
+
+});
+
+let container = null;
+
+function updatePosition() {
+  const position = game.settings.get("daggerheart-fear-tracker", "barPosition");
+  if (!container) return;
+  container.style.top = position === "top" ? "0" : "unset";
+  container.style.bottom = position === "bottom" ? "0" : "unset";
+  container.style.marginTop = position === "top" ? "40px" : "unset";
+  container.style.marginBottom = position === "bottom" ? "55px" : "unset";
+}
+
+// Ensure that position is updated when config settings are saved
+Hooks.on("closeSettingsConfig", () => {
+  updatePosition();
 });
 
 Hooks.once("ready", () => {
 
+  // Remove existing slider bar if present
   const existing = document.getElementById("daggerheart-fear-tracker-container");
   if (existing) {
     console.warn("Removing existing slider container to prevent duplication.");
@@ -74,7 +115,8 @@ Hooks.once("ready", () => {
 
   const isGM = game.user.isGM;
 
-  const container = document.createElement("div");
+  // Create mother container
+  container = document.createElement("div");
   container.id = "daggerheart-fear-tracker-container";
   container.style.position = "fixed";
   container.style.left = "0";
@@ -108,7 +150,8 @@ Hooks.once("ready", () => {
   //slider.style.alignItems = "center";
   //slider.style.pointerEvents = "auto";
 
-  const totalPips = 12;
+  //const totalPips = 12;
+  const totalPips = game.settings.get("daggerheart-fear-tracker", "maxFearTokens");
   let leftSideCount = game.settings.get("daggerheart-fear-tracker", "leftSideCount");
 
   const pipInactive = game.settings.get("daggerheart-fear-tracker", "pipInactiveImage");
@@ -157,6 +200,8 @@ Hooks.once("ready", () => {
     activeImg.style.outline = "none";
     activeImg.style.backgroundColor = "transparent";
     activeImg.style.display = "block";
+    activeImg.style.filter = "drop-shadow(0 0 6px rgba(253, 219, 82, 0.9))";
+    //activeImg.classList.add("pip-pulse");
 
     pipWrapper.appendChild(inactiveImg);
     pipWrapper.appendChild(activeImg);
@@ -299,17 +344,6 @@ Hooks.once("ready", () => {
         location.reload();
       }
     }
-  }
-
-  function updatePosition() {
-    //container.style.top = game.settings.get("daggerheart-fear-tracker", "barPosition") === "top" ? "0" : "unset";
-    //container.style.bottom = game.settings.get("daggerheart-fear-tracker", "barPosition") === "bottom" ? "0" : "unset";
-  
-    const position = game.settings.get("daggerheart-fear-tracker", "barPosition");
-    container.style.top = position === "top" ? "0" : "unset";
-    container.style.bottom = position === "bottom" ? "0" : "unset";
-    container.style.marginTop = position === "top" ? "40px" : "unset";
-    container.style.marginBottom = position === "bottom" ? "55px" : "unset";
   }
 
 });
