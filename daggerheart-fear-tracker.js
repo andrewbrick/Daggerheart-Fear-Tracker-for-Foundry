@@ -273,6 +273,7 @@ Hooks.once("ready", () => {
   slider.appendChild(pipContainer);
   updatePips(leftSideCount);
 
+  // Add plus and minus buttons
   const minus = document.createElement("img");
   minus.src = "modules/daggerheart-fear-tracker/images/minus.png";
   minus.style.width = "30px";
@@ -327,9 +328,9 @@ Hooks.once("ready", () => {
     game.socket.emit("module.daggerheart-fear-tracker", { type: "toggleVisibility" });
   });
 
-  sliderWrapper.appendChild(minus);
+  if (isGM) sliderWrapper.appendChild(minus);
   sliderWrapper.appendChild(slider);
-  sliderWrapper.appendChild(plus);
+  if (isGM) sliderWrapper.appendChild(plus);
   if (isGM) sliderWrapper.appendChild(eye);
   container.appendChild(sliderWrapper);
   document.body.appendChild(container);
