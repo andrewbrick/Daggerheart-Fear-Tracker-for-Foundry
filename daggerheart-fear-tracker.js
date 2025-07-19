@@ -130,7 +130,8 @@ Hooks.once("ready", () => {
     }
     if (payload.type === "toggleVisibility") {
       const visible = game.settings.get("daggerheart-fear-tracker", "barVisible");
-      sliderWrapper.style.opacity = visible ? "1" : (game.user.isGM ? "0.5" : "0");
+      console.log("Setting visibility when slider value is", visible);
+      sliderWrapper.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
     }
   });
 
@@ -319,6 +320,7 @@ Hooks.once("ready", () => {
     if (!isGM) return;
     const current = game.settings.get("daggerheart-fear-tracker", "barVisible");
     const newState = !current;
+    console.log("slider was ", current, ". Just set to ", newState);
     game.settings.set("daggerheart-fear-tracker", "barVisible", newState);
     sliderWrapper.style.opacity = newState ? "1" : "0.5";
     eye.className = newState ? "fas fa-eye" : "fas fa-eye-slash";
