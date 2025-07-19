@@ -41,7 +41,10 @@ Hooks.once("init", () => {
       "top": "Top",
       "bottom": "Bottom"
     },
-    default: "bottom"
+    default: "bottom",
+    //onChange: () => {
+    //  updatePosition();
+    //}
   });
 
   game.settings.register("daggerheart-fear-tracker", "barVisible", {
@@ -77,6 +80,7 @@ Hooks.once("ready", () => {
   container.style.left = "0";
   container.style.width = "100%";
   container.style.zIndex = 100;
+  container.style.marginTop = "40px";
   container.style.display = game.settings.get("daggerheart-fear-tracker", "barVisible") ? "flex" : "none";
   container.style.justifyContent = "center";
   container.style.pointerEvents = "none";
@@ -126,14 +130,14 @@ Hooks.once("ready", () => {
     pipWrapper.style.top = "10px";
     //pipWrapper.style.top = "50%";
     //pipWrapper.style.transform = "translateY(-50%)";
-    pipWrapper.style.width = "30px";
+    pipWrapper.style.width = "23px";
     pipWrapper.style.height = "30px";
     pipWrapper.style.transition = "left 1s ease";
 
     const inactiveImg = document.createElement("img");
     inactiveImg.src = pipInactive;
     inactiveImg.style.position = "absolute";
-    inactiveImg.style.width = "30px";
+    inactiveImg.style.width = "23px";
     inactiveImg.style.height = "30px";
     inactiveImg.style.transition = "opacity 1s ease";
     inactiveImg.style.opacity = "1";
@@ -145,7 +149,7 @@ Hooks.once("ready", () => {
     const activeImg = document.createElement("img");
     activeImg.src = pipActive;
     activeImg.style.position = "absolute";
-    activeImg.style.width = "30px";
+    activeImg.style.width = "23px";
     activeImg.style.height = "30px";
     activeImg.style.transition = "opacity 1s ease";
     activeImg.style.opacity = "0";
@@ -183,11 +187,11 @@ Hooks.once("ready", () => {
   
       if (isActive) {
         const activeIndex = i - leftSideCount;
-        // Active pips start from (slider width - activeCount * spacing)
-        const startX = slider.clientWidth - (activeCount * 34) - 0; // additional to nudge the start to the left
-        targetLeft = startX + (activeIndex * 34);
+        // Active pips start from (slider width - activeCount * spacing) // changed spacing from 34 to 28
+        const startX = slider.clientWidth - (activeCount * 28) - 15; // additional to nudge the start to the left
+        targetLeft = startX + (activeIndex * 28);
       } else {
-        targetLeft = i * 34 + 0; // additional to nudge the start to the right
+        targetLeft = i * 28 + 15; // additional to nudge the start to the right
       }
   
       pip.wrapper.style.left = `${targetLeft}px`;
@@ -295,19 +299,17 @@ Hooks.once("ready", () => {
         location.reload();
       }
     }
-
-    //game.settings.registerMenu("daggerheart-fear-tracker", "toggleVisibility", {
-    //  name: "Toggle Slider Overlay",
-    //  label: "Toggle Visibility",
-    //  hint: "GM only visibility toggle",
-    //  icon: "fas fa-eye",
-    //  type: ToggleOverlayMenu,
-    //  restricted: true
-    //});
   }
 
   function updatePosition() {
-    container.style.top = game.settings.get("daggerheart-fear-tracker", "barPosition") === "top" ? "0" : "unset";
-    container.style.bottom = game.settings.get("daggerheart-fear-tracker", "barPosition") === "bottom" ? "0" : "unset";
+    //container.style.top = game.settings.get("daggerheart-fear-tracker", "barPosition") === "top" ? "0" : "unset";
+    //container.style.bottom = game.settings.get("daggerheart-fear-tracker", "barPosition") === "bottom" ? "0" : "unset";
+  
+    const position = game.settings.get("daggerheart-fear-tracker", "barPosition");
+    container.style.top = position === "top" ? "0" : "unset";
+    container.style.bottom = position === "bottom" ? "0" : "unset";
+    container.style.marginTop = position === "top" ? "40px" : "unset";
+    container.style.marginBottom = position === "bottom" ? "55px" : "unset";
   }
+
 });
