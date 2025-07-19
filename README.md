@@ -8,5 +8,5 @@ It's my first module. I'm trying. Help appreciated. :)
 
 Feature Roadmap:
 - Player-controlled settings:
--- Top/bottom display
--- normal, windowed mini version, number-only version
+- - Top/bottom display
+  - normal, windowed mini version, number-only version
