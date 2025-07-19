@@ -6,7 +6,7 @@
   "compatibility": {
     "minimum": "12",
     "verified": "12"
-  }
+  },
   "styles": [],
   "scripts": ["daggerheart-fear-tracker.js"],
   "esmodules": [],
