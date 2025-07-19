@@ -105,7 +105,15 @@ Hooks.on("closeSettingsConfig", () => {
   updatePosition();
 });
 
+// Socket registration
+//Hooks.once("init", () => {
+//  console.log("Socket registration");
+//  game.modules.get("daggerheart-fear-tracker").socket = socketlib.registerModule("daggerheart-fear-tracker");
+//});
+
 Hooks.once("ready", () => {
+
+  const isGM = game.user.isGM;
 
   // Remove existing slider bar if present
   const existing = document.getElementById("daggerheart-fear-tracker-container");
@@ -114,7 +122,20 @@ Hooks.once("ready", () => {
     existing.remove();
   }
 
-  const isGM = game.user.isGM;
+  // Listener for updates
+  game.socket.on("module.daggerheart-fear-tracker", (payload) => {
+    console.log("game.socket.on called for ", game.user.name);
+    if (payload.type === "updatePips") {
+      updatePips(payload.leftSideCount);
+    }
+    if (payload.type === "toggleVisibility") {
+      const visible = game.settings.get("daggerheart-fear-tracker", "barVisible");
+      sliderWrapper.style.opacity = visible ? "1" : (game.user.isGM ? "0.5" : "0");
+    }
+  });
+
+  // Testing
+  //console.log("Fear tracker ready on ", game.user.name);
 
   // Create mother container
   container = document.createElement("div");
@@ -128,6 +149,7 @@ Hooks.once("ready", () => {
   container.style.justifyContent = "center";
   container.style.pointerEvents = "none";
 
+  //console.log("Ready to call updatePosition for the first time for ", game.user.name);
   updatePosition();
 
   const sliderWrapper = document.createElement("div");
@@ -223,6 +245,7 @@ Hooks.once("ready", () => {
   document.body.appendChild(container);
 
   function updatePips(count) {
+    //console.log("updatePips called for user ", game.user.name);
     leftSideCount = count;
     const activeCount = totalPips - leftSideCount;
   
@@ -248,16 +271,6 @@ Hooks.once("ready", () => {
 
   slider.appendChild(pipContainer);
   updatePips(leftSideCount);
-
-  game.socket.on("module.daggerheart-fear-tracker", (payload) => {
-    if (payload.type === "updatePips") {
-      updatePips(payload.leftSideCount);
-    }
-    if (payload.type === "toggleVisibility") {
-      const visible = game.settings.get("daggerheart-fear-tracker", "barVisible");
-      sliderWrapper.style.opacity = visible ? "1" : (game.user.isGM ? "0.5" : "0");
-    }
-  });
 
   const minus = document.createElement("img");
   minus.src = "modules/daggerheart-fear-tracker/images/minus.png";
