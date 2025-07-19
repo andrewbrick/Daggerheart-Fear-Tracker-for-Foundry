@@ -184,10 +184,10 @@ Hooks.once("ready", () => {
       if (isActive) {
         const activeIndex = i - leftSideCount;
         // Active pips start from (slider width - activeCount * spacing)
-        const startX = slider.clientWidth - (activeCount * 34) - 15; // additional to nudge the start to the left
+        const startX = slider.clientWidth - (activeCount * 34) - 0; // additional to nudge the start to the left
         targetLeft = startX + (activeIndex * 34);
       } else {
-        targetLeft = i * 34 + 15; // additional to nudge the start to the right
+        targetLeft = i * 34 + 0; // additional to nudge the start to the right
       }
   
       pip.wrapper.style.left = `${targetLeft}px`;
