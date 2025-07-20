@@ -15,6 +15,6 @@ Feature Roadmap:
 - retain current number of fear tokens when changing max number of tokens
 - player-controlled settings:
   - top/bottom display
-  - choose: normal, windowed mini version, number-only version
+  - choose: normal, windowed mini version, number-only version (remember selection and position)
 - additional themes
 - cooler animations? 
