@@ -39,12 +39,23 @@ Hooks.once("init", () => {
   // mini version pip character
   game.settings.register("fear-tracker", "miniPipCharacter", {
     name: "Mini Tracker Pip Character",
-    hint: "Change the mini tracker pip character. Applies only to you.",
+    hint: "Change the mini tracker pip character (use one character only). Applies only to you.",
     scope: "client",
     config: true,
     type: String,
     default: "\u25CF", // unicode black circle
-    onChange: () => {
+    onChange: async (value) => {
+      // Validate single char
+      const trimmed = value.trim();
+      if (trimmed.length === 0) {
+        ui.notifications.warn("Mini Tracker Pip Character field is blank. Using default.");
+        await game.settings.set("fear-tracker", "miniPipCharacter", "●");
+      } else if (trimmed.length > 1) {
+        const firstChar = trimmed.charAt(0);
+        ui.notifications.warn("You must enter exactly one character. Using only the first character.");
+        await game.settings.set("fear-tracker", "miniPipCharacter", firstChar);
+      }
+      
       const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
       const existingLarge = document.getElementById("fear-tracker-container");
