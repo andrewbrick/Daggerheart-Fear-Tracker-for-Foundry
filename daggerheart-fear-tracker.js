@@ -12,7 +12,7 @@ Hooks.once("init", () => {
     hint: "Choose between Large or Small (windowed mini) version of the tracker. Both versions are draggable and remember their positions on the screen. Applies only to you.",
     scope: "client",
     config: true,
-    type: new game.colorPicker.ColorPickerField(), //String,
+    type: String,
     choices: {
       large: "Large",
       small: "Small",
@@ -67,7 +67,7 @@ Hooks.once("init", () => {
     hint: "Change the color of the active pips (fear) in the mini tracker. Applies only to you.",
     scope: "client",
     config: true,
-    type: String,
+    type: String, //new game.colorPicker.ColorPickerField(),
     default: "#A02B93",
     onChange: () => {
       const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
