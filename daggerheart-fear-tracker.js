@@ -21,16 +21,13 @@ Hooks.once("init", () => {
     onChange: value => {
       const existingMini = document.getElementById("mini-fear-tracker");
       const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
-      //const visible = large.style.display;
-      console.log("existing mini", existingMini);
-      console.log("existing large", existingLarge);
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
 
       if (value === "large") {
-        let container = null;
-        let pips = [];
-        let slider = null;
+        container = null;
+        pips = [];
+        slider = null;
         renderLargeTracker();
       } else {
         renderMiniTracker();
@@ -45,7 +42,23 @@ Hooks.once("init", () => {
     scope: "client",
     config: true,
     type: String,
-    default: "\u25CF" // unicode black circle
+    default: "\u25CF", // unicode black circle
+    onChange: () => {
+      const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+      const existingMini = document.getElementById("mini-fear-tracker");
+      const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
+      if (existingMini) existingMini.remove();
+      if (existingLarge) existingLarge.remove();
+
+      if (size === "large") {
+        container = null;
+        pips = [];
+        slider = null;
+        renderLargeTracker();
+      } else {
+        renderMiniTracker();
+      }
+    }
   });
 
   // mini active pip color
@@ -55,7 +68,23 @@ Hooks.once("init", () => {
     scope: "client",
     config: true,
     type: String,
-    default: "#A02B93"
+    default: "#A02B93",
+    onChange: () => {
+      const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+      const existingMini = document.getElementById("mini-fear-tracker");
+      const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
+      if (existingMini) existingMini.remove();
+      if (existingLarge) existingLarge.remove();
+
+      if (size === "large") {
+        container = null;
+        pips = [];
+        slider = null;
+        renderLargeTracker();
+      } else {
+        renderMiniTracker();
+      }
+    }
   });
   // mini inactive pip color
   game.settings.register("daggerheart-fear-tracker", "miniColorInactive", {
@@ -64,7 +93,23 @@ Hooks.once("init", () => {
     scope: "client",
     config: true,
     type: String,
-    default: "#C4C4C4"
+    default: "#C4C4C4",
+    onChange: () => {
+      const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+      const existingMini = document.getElementById("mini-fear-tracker");
+      const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
+      if (existingMini) existingMini.remove();
+      if (existingLarge) existingLarge.remove();
+
+      if (size === "large") {
+        container = null;
+        pips = [];
+        slider = null;
+        renderLargeTracker();
+      } else {
+        renderMiniTracker();
+      }
+    }
   });
 
   // keep track of the mini tracker's position
@@ -137,7 +182,22 @@ Hooks.once("init", () => {
     scope: "world",
     config: false,
     type: Number,
-    default: 12
+    default: 12,
+    onChange: () => {
+      game.settings.set("daggerheart-fear-tracker", "activeFear", game.settings.get("daggerheart-fear-tracker", "maxFearTokens") - game.settings.get("daggerheart-fear-tracker", "leftSideCount"));
+    }
+  });
+
+  // Init for fear token number (used only for changing total number of tokens)
+  game.settings.register("daggerheart-fear-tracker", "activeFear", {
+    name: "Active Fear",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0,
+    onChange: (value) => {
+      console.log("activeFear changed to", value);
+    }
   });
 
   // Option to change the number of fear tokens
@@ -153,9 +213,49 @@ Hooks.once("init", () => {
       max: 30,
       step: 1,
     },
-    onChange: () => {
-      game.settings.set("daggerheart-fear-tracker", "leftSideCount", game.settings.get("daggerheart-fear-tracker", "maxFearTokens")),
-      window.location.reload(); // easiest way to re-render the slider correctly
+    onChange: (value) => {
+      console.log("value", value);
+      currentFear = game.settings.get("daggerheart-fear-tracker", "activeFear");
+      if (currentFear > value) { // user has reduced the max number of tokens
+        currentFear = value;
+      } 
+      
+      console.log("else activeFear changed to", currentFear);
+      newLeftSide = game.settings.get("daggerheart-fear-tracker", "maxFearTokens") - currentFear;
+      console.log("leftSideCount changed to", newLeftSide);
+      
+      const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+      const existingMini = document.getElementById("mini-fear-tracker");
+      const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
+      if (existingMini) existingMini.remove();
+      if (existingLarge) existingLarge.remove();
+
+      if (size === "large") {
+        container = null;
+        pips = [];
+        slider = null;
+        Promise.all([
+          game.settings.set("daggerheart-fear-tracker", "activeFear", currentFear),
+          game.settings.set("daggerheart-fear-tracker", "leftSideCount", newLeftSide)
+        ]).then(() => {
+          renderLargeTracker();
+        });
+      } else {
+        Promise.all([
+          game.settings.set("daggerheart-fear-tracker", "activeFear", currentFear),
+          game.settings.set("daggerheart-fear-tracker", "leftSideCount", newLeftSide)
+        ]).then(() => {
+          renderMiniTracker();
+        });
+      }
+      
+      //const currentInactive = game.settings.get("daggerheart-fear-tracker", "leftSideCount");
+      
+      //game.settings.set("daggerheart-fear-tracker", "leftSideCount", game.settings.get("daggerheart-fear-tracker", "maxFearTokens"));
+    
+      
+      //window.location.reload(); // easiest way to re-render the slider correctly
+      //SettingsConfig.reloadConfirm();
     },
   });
 
