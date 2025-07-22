@@ -10,6 +10,12 @@ A simple overlay compatible with the Daggerheart game system that tracks GM fear
 Standard (large) tracker:
 ![Large Tracker](./screenshots/fear-tracker-1.jpg)
 
+Mini tracker:
+![Mini Tracker](./screenshots/fear-tracker-2.jpg)
+
+Settings Dialog:
+![Settings](./screenshots/fear-tracker-3.jpg)
+
 Plan to have additional themes (images) at some point, but for now, custom images can be used for the slider bar and tokens via the module's settings.
 
 Copyright notice:
