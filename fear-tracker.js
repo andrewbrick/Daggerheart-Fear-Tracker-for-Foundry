@@ -493,6 +493,7 @@ function renderMiniTracker() {
   tracker.style.alignItems = "center";
   tracker.style.gap = "6px";
   tracker.draggable = true;
+  tracker.style.opacity = game.settings.get("fear-tracker", "barVisible") ? "1" : (isGM ? "0.5" : "0");
 
   leftSideCount = game.settings.get("fear-tracker", "leftSideCount");
   const pipChar = game.settings.get("fear-tracker", "miniPipCharacter");
