@@ -1,6 +1,7 @@
 /*
 Module: Fear Tracker for Foundry VTT
 Compatible with: Foundry VTT v12 and v13
+Copyright notice: This product includes materials from the Daggerheart System Reference Document 1.0 (https://www.daggerheart.com/wp-content/uploads/2025/05/DH-SRD-May202025.pdf), © Critical Role, LLC. All rights reserved. "Daggerheart" is a registered trademark of Darrington Press, LLC. Used under the Darrington Press Community Gaming License (https://darringtonpress.com/wp-content/uploads/2025/06/DPCGL-June-26-2025.pdf) with Foundry as a whitelisted VTT (https://darringtonpress.com/license/).
 */
 
 Hooks.once("init", () => {
