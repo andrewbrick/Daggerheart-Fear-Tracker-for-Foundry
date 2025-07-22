@@ -188,7 +188,7 @@ Hooks.once("init", () => {
     type: Number,
     default: 0,
     onChange: (value) => {
-      console.log("activeFear changed to", value);
+      //console.log("activeFear changed to", value);
     }
   });
 
@@ -206,15 +206,15 @@ Hooks.once("init", () => {
       step: 1,
     },
     onChange: (value) => {
-      console.log("value", value);
+      //console.log("value", value);
       currentFear = game.settings.get("fear-tracker", "activeFear");
       if (currentFear > value) { // user has reduced the max number of tokens
         currentFear = value;
       } 
       
-      console.log("else activeFear changed to", currentFear);
+      //console.log("else activeFear changed to", currentFear);
       newLeftSide = game.settings.get("fear-tracker", "maxFearTokens") - currentFear;
-      console.log("leftSideCount changed to", newLeftSide);
+      //console.log("leftSideCount changed to", newLeftSide);
       
       const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
@@ -288,12 +288,12 @@ function setupDrag(tracker) {
 // Renderer for large tracker
 function renderLargeTracker(render = true) {
 
-  console.log("renderLargeTracker called");
+  //console.log("renderLargeTracker called");
   const isGM = game.user.isGM;
   const mode = game.settings.get("fear-tracker", "trackerSize");
 
   const pos = game.settings.get("fear-tracker", "largeTrackerPosition");
-  console.log("pos", pos);
+  //console.log("pos", pos);
   
   // Create mother container and element containers
   container = document.createElement("div");
@@ -466,7 +466,7 @@ function renderLargeTracker(render = true) {
 // Function to render mini tracker
 function renderMiniTracker() {
 
-  console.log("renderMiniTracker called");
+  //console.log("renderMiniTracker called");
   const isGM = game.user.isGM;
   
   const tracker = document.createElement("div");
@@ -496,9 +496,13 @@ function renderMiniTracker() {
     minus.src = "modules/fear-tracker/images/minus.png";
     minus.style.width = "16px";
     minus.style.height = "16px";
+    minus.style.marginTop = "2px";
     minus.style.cursor = "pointer";
+    minus.style.border = "none";
+    minus.style.outline = "none";
+    minus.style.backgroundColor = "transparent";
     minus.onclick = () => {
-      console.log("mini tracker minus click!");
+      //console.log("mini tracker minus click!");
       if (leftSideCount < totalPips) {
         leftSideCount++;
         game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
@@ -528,9 +532,13 @@ function renderMiniTracker() {
     plus.src = "modules/fear-tracker/images/plus.png";
     plus.style.width = "16px";
     plus.style.height = "16px";
+    plus.style.marginTop = "2px";
     plus.style.cursor = "pointer";
+    plus.style.border = "none";
+    plus.style.outline = "none";
+    plus.style.backgroundColor = "transparent";
     plus.onclick = () => {
-      console.log("mini tracker plus click!");
+      //console.log("mini tracker plus click!");
       if (leftSideCount > 0) {
         leftSideCount--;
         game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
@@ -539,6 +547,29 @@ function renderMiniTracker() {
       }
     };
     tracker.appendChild(plus);
+  }
+
+  // Add visibility toggle button (GM only)
+  if (isGM) {
+    const eye = document.createElement("i");
+    eye.className = game.settings.get("fear-tracker", "barVisible") ? "fas fa-eye" : "fas fa-eye-slash";
+    eye.style.cursor = "pointer";
+    eye.style.fontSize = "16px";
+    eye.style.color = "white";
+    eye.style.marginLeft = "4px";
+    eye.style.flex = "0 0 auto";
+    eye.style.marginTop = "2px";
+    eye.onclick = () => {
+      if (!isGM) return;
+      const current = game.settings.get("fear-tracker", "barVisible");
+      const newState = !current;
+      //console.log("slider was ", current, ". Just set to ", newState);
+      game.settings.set("fear-tracker", "barVisible", newState);
+      tracker.style.opacity = newState ? "1" : "0.5";
+      eye.className = newState ? "fas fa-eye" : "fas fa-eye-slash";
+      game.socket.emit("module.fear-tracker", { type: "toggleVisibility" });
+    };
+    tracker.appendChild(eye);
   }
 
   // Load position
@@ -634,12 +665,13 @@ Hooks.once("ready", () => {
     }
     if (payload.type === "toggleVisibility") {
       const visible = game.settings.get("fear-tracker", "barVisible");
+      const size = game.settings.get("fear-tracker", "trackerSize");
       //console.log("Setting visibility when slider value is", visible);
-      container.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
+      existingLarge = document.getElementById("fear-tracker-container"); //container.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
+      existingMini = document.getElementById("mini-fear-tracker");
+      if (existingLarge) existingLarge.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
+      if (existingMini) existingMini.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
     }
   });
   
-  // Testing
-  //console.log("Fear tracker ready on ", game.user.name);
-
 });
