@@ -10,7 +10,7 @@ A simple overlay that tracks GM fear tokens for the Daggerheart game system. Pla
 Plan to have additional themes (images) at some point, but for now, custom images can be used for the slider bar and tokens via the module's settings.
 
 Issues:
-- None at this time
+- [here they are](https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/issues)
 
 It's my first module. I'm trying. Help appreciated. :)
 
