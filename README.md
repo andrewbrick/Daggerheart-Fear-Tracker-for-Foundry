@@ -9,7 +9,7 @@ A simple overlay compatible with the Daggerheart game system that tracks GM fear
 
 Standard (large) tracker:
 ![Large Tracker](./screenshots/fear-tracker-1.jpg)
-
+![Large Tracker Demo](./screenshots/fear-tracker-demo-large.gif)
 
 Mini tracker:
 ![Mini Tracker](./screenshots/fear-tracker-2.jpg)
