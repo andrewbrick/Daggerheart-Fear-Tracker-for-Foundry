@@ -17,7 +17,25 @@ Hooks.once("init", () => {
       large: "Large",
       small: "Small",
     },
-    default: "large"
+    default: "large",
+    onChange: value => {
+      const existingMini = document.getElementById("mini-fear-tracker");
+      const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
+      //const visible = large.style.display;
+      console.log("existing mini", existingMini);
+      console.log("existing large", existingLarge);
+      if (existingMini) existingMini.remove();
+      if (existingLarge) existingLarge.remove();
+
+      if (value === "large") {
+        let container = null;
+        let pips = [];
+        let slider = null;
+        renderLargeTracker();
+      } else {
+        renderMiniTracker();
+      }
+    }
   });
 
   // mini version pip character
@@ -188,7 +206,7 @@ function setupDrag(tracker) {
 // Renderer for large tracker
 function renderLargeTracker(render = true) {
 
-  console.log("rendering large tracker");
+  console.log("renderLargeTracker called");
   const isGM = game.user.isGM;
   const mode = game.settings.get("daggerheart-fear-tracker", "trackerSize");
   
@@ -516,7 +534,7 @@ Hooks.once("ready", () => {
   if (mode === "small") {
     console.log("rendering mini tracker");
     renderMiniTracker();
-    renderLargeTracker(); // but it will be invisible
+    //renderLargeTracker(); // but it will be invisible
   } else { // render large one
     console.log("rendering large tracker");
     renderLargeTracker();
