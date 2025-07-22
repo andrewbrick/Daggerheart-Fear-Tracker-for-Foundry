@@ -1,5 +1,5 @@
 /*
-Module: Animated Slider Bar Overlay
+Module: Fear Tracker for Foundry VTT
 Compatible with: Foundry VTT v12 and v13
 */
 
@@ -7,7 +7,7 @@ Hooks.once("init", () => {
 
   // Setting registration / Config setup
   // mini or large
-  game.settings.register("daggerheart-fear-tracker", "trackerSize", {
+  game.settings.register("fear-tracker", "trackerSize", {
     name: "Fear Tracker Size",
     hint: "Choose between Large or Small (windowed mini) version of the tracker. Both versions are draggable and remember their positions on the screen. Applies only to you.",
     scope: "client",
@@ -20,7 +20,7 @@ Hooks.once("init", () => {
     default: "large",
     onChange: value => {
       const existingMini = document.getElementById("mini-fear-tracker");
-      const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
+      const existingLarge = document.getElementById("fear-tracker-container");
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
 
@@ -36,7 +36,7 @@ Hooks.once("init", () => {
   });
 
   // mini version pip character
-  game.settings.register("daggerheart-fear-tracker", "miniPipCharacter", {
+  game.settings.register("fear-tracker", "miniPipCharacter", {
     name: "Mini Tracker Pip Character",
     hint: "Change the mini tracker pip character. Applies only to you.",
     scope: "client",
@@ -44,9 +44,9 @@ Hooks.once("init", () => {
     type: String,
     default: "\u25CF", // unicode black circle
     onChange: () => {
-      const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+      const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
-      const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
+      const existingLarge = document.getElementById("fear-tracker-container");
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
 
@@ -62,7 +62,7 @@ Hooks.once("init", () => {
   });
 
   // mini active pip color
-  game.settings.register("daggerheart-fear-tracker", "miniColorActive", {
+  game.settings.register("fear-tracker", "miniColorActive", {
     name: "Mini Tracker Active Pip Color",
     hint: "Change the color of the active pips (fear) in the mini tracker. Applies only to you.",
     scope: "client",
@@ -70,9 +70,9 @@ Hooks.once("init", () => {
     type: new game.colorPicker.ColorPickerField(),
     default: "#A02B93",
     onChange: () => {
-      const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+      const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
-      const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
+      const existingLarge = document.getElementById("fear-tracker-container");
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
 
@@ -87,7 +87,7 @@ Hooks.once("init", () => {
     }
   });
   // mini inactive pip color
-  game.settings.register("daggerheart-fear-tracker", "miniColorInactive", {
+  game.settings.register("fear-tracker", "miniColorInactive", {
     name: "Mini Tracker Inactive Pip Color",
     hint: "Change the color of the inactive pips (not fear) in the mini tracker. Applies only to you.",
     scope: "client",
@@ -95,9 +95,9 @@ Hooks.once("init", () => {
     type: new game.colorPicker.ColorPickerField(),
     default: "#C4C4C4",
     onChange: () => {
-      const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+      const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
-      const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
+      const existingLarge = document.getElementById("fear-tracker-container");
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
 
@@ -113,14 +113,14 @@ Hooks.once("init", () => {
   });
 
   // keep track of the tracker's position
-  game.settings.register("daggerheart-fear-tracker", "miniTrackerPosition", {
+  game.settings.register("fear-tracker", "miniTrackerPosition", {
     name: "Mini Tracker Position",
     scope: "client",
     config: false,
     type: Object,
     default: {top:100, left:100}
   });
-  game.settings.register("daggerheart-fear-tracker", "largeTrackerPosition", {
+  game.settings.register("fear-tracker", "largeTrackerPosition", {
     name: "Large Tracker Position",
     scope: "client",
     config: false,
@@ -128,38 +128,38 @@ Hooks.once("init", () => {
     default: {top:100, left:100}
   });
   
-  game.settings.register("daggerheart-fear-tracker", "sliderImage", {
+  game.settings.register("fear-tracker", "sliderImage", {
     name: "GM: Slider Bar Image",
     hint: "Path to the slider bar PNG image (1000 x 30). Applies to world.",
     scope: "world",
     config: true,
     type: String,
     filePicker: "image",
-    default: "modules/daggerheart-fear-tracker/images/slider.png"
+    default: "modules/fear-tracker/images/slider.png"
   });
 
-  game.settings.register("daggerheart-fear-tracker", "pipActiveImage", {
+  game.settings.register("fear-tracker", "pipActiveImage", {
     name: "GM: Activated Pip Image",
     hint: "Path to the activated pip PNG image (300 x 457). Applies to world.",
     scope: "world",
     config: true,
     type: String,
     filePicker: "image",
-    default: "modules/daggerheart-fear-tracker/images/pip-active.png"
+    default: "modules/fear-tracker/images/pip-active.png"
   });
 
-  game.settings.register("daggerheart-fear-tracker", "pipInactiveImage", {
+  game.settings.register("fear-tracker", "pipInactiveImage", {
     name: "GM: Inactive Pip Image",
     hint: "Path to the inactive pip PNG image (300 x 457). Applies to world.",
     scope: "world",
     config: true,
     type: String,
     filePicker: "image",
-    default: "modules/daggerheart-fear-tracker/images/pip-inactive.png"
+    default: "modules/fear-tracker/images/pip-inactive.png"
   });
 
   // Slider visibility
-  game.settings.register("daggerheart-fear-tracker", "barVisible", {
+  game.settings.register("fear-tracker", "barVisible", {
     name: "Slider Bar Visible",
     scope: "world",
     config: false,
@@ -168,19 +168,19 @@ Hooks.once("init", () => {
   });
 
   // Init for pip counter
-  game.settings.register("daggerheart-fear-tracker", "leftSideCount", {
+  game.settings.register("fear-tracker", "leftSideCount", {
     name: "Pip Count Left Side",
     scope: "world",
     config: false,
     type: Number,
     default: 12,
     onChange: () => {
-      game.settings.set("daggerheart-fear-tracker", "activeFear", game.settings.get("daggerheart-fear-tracker", "maxFearTokens") - game.settings.get("daggerheart-fear-tracker", "leftSideCount"));
+      game.settings.set("fear-tracker", "activeFear", game.settings.get("fear-tracker", "maxFearTokens") - game.settings.get("fear-tracker", "leftSideCount"));
     }
   });
 
   // Init for fear token number (used only for changing total number of tokens)
-  game.settings.register("daggerheart-fear-tracker", "activeFear", {
+  game.settings.register("fear-tracker", "activeFear", {
     name: "Active Fear",
     scope: "world",
     config: false,
@@ -192,7 +192,7 @@ Hooks.once("init", () => {
   });
 
   // Option to change the number of fear tokens
-  game.settings.register("daggerheart-fear-tracker", "maxFearTokens", {
+  game.settings.register("fear-tracker", "maxFearTokens", {
     name: "GM: Maximum number of fear tokens",
     hint: "This determines how many total tokens appear in the slider. To the extent possible, the current amount of fear will be preserved when this number is changed.",
     scope: "world",
@@ -206,18 +206,18 @@ Hooks.once("init", () => {
     },
     onChange: (value) => {
       console.log("value", value);
-      currentFear = game.settings.get("daggerheart-fear-tracker", "activeFear");
+      currentFear = game.settings.get("fear-tracker", "activeFear");
       if (currentFear > value) { // user has reduced the max number of tokens
         currentFear = value;
       } 
       
       console.log("else activeFear changed to", currentFear);
-      newLeftSide = game.settings.get("daggerheart-fear-tracker", "maxFearTokens") - currentFear;
+      newLeftSide = game.settings.get("fear-tracker", "maxFearTokens") - currentFear;
       console.log("leftSideCount changed to", newLeftSide);
       
-      const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+      const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
-      const existingLarge = document.getElementById("daggerheart-fear-tracker-container");
+      const existingLarge = document.getElementById("fear-tracker-container");
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
 
@@ -226,15 +226,15 @@ Hooks.once("init", () => {
         pips = [];
         slider = null;
         Promise.all([
-          game.settings.set("daggerheart-fear-tracker", "activeFear", currentFear),
-          game.settings.set("daggerheart-fear-tracker", "leftSideCount", newLeftSide)
+          game.settings.set("fear-tracker", "activeFear", currentFear),
+          game.settings.set("fear-tracker", "leftSideCount", newLeftSide)
         ]).then(() => {
           renderLargeTracker();
         });
       } else {
         Promise.all([
-          game.settings.set("daggerheart-fear-tracker", "activeFear", currentFear),
-          game.settings.set("daggerheart-fear-tracker", "leftSideCount", newLeftSide)
+          game.settings.set("fear-tracker", "activeFear", currentFear),
+          game.settings.set("fear-tracker", "leftSideCount", newLeftSide)
         ]).then(() => {
           renderMiniTracker();
         });
@@ -251,7 +251,7 @@ let slider = null;
 // Drag function
 function setupDrag(tracker) {
   let offset = { x: 0, y: 0 };
-  const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+  const size = game.settings.get("fear-tracker", "trackerSize");
 
   function onMouseMove(event) {
     event.preventDefault();
@@ -265,9 +265,9 @@ function setupDrag(tracker) {
     window.removeEventListener("mouseup", onMouseUp);
     // Save position to settings
     if (size === "small") {
-      game.settings.set("daggerheart-fear-tracker", "miniTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
+      game.settings.set("fear-tracker", "miniTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
     } else {
-      game.settings.set("daggerheart-fear-tracker", "largeTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
+      game.settings.set("fear-tracker", "largeTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
     }
   }
 
@@ -289,14 +289,14 @@ function renderLargeTracker(render = true) {
 
   console.log("renderLargeTracker called");
   const isGM = game.user.isGM;
-  const mode = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+  const mode = game.settings.get("fear-tracker", "trackerSize");
 
-  const pos = game.settings.get("daggerheart-fear-tracker", "largeTrackerPosition");
+  const pos = game.settings.get("fear-tracker", "largeTrackerPosition");
   console.log("pos", pos);
   
   // Create mother container and element containers
   container = document.createElement("div");
-  container.id = "daggerheart-fear-tracker-container";
+  container.id = "fear-tracker-container";
   container.style.position = "fixed";
   container.style.left = pos.left ? pos.left : "0";
   container.style.top = pos.top ? pos.top : "0";
@@ -306,7 +306,7 @@ function renderLargeTracker(render = true) {
   container.style.display = mode === "small" ? "none" : "flex"; // don't display if small mode is selected (probably deprecated, can be "flex" most likely)
   container.style.justifyContent = "center";
   container.style.pointerEvents = "none";
-  container.style.opacity = game.settings.get("daggerheart-fear-tracker", "barVisible") ? "1" : (isGM ? "0.5" : "0");
+  container.style.opacity = game.settings.get("fear-tracker", "barVisible") ? "1" : (isGM ? "0.5" : "0");
   container.draggable = true;
 
   const sliderWrapper = document.createElement("div");
@@ -318,7 +318,7 @@ function renderLargeTracker(render = true) {
 
   slider = document.createElement("div");
   slider.id = "slider-bar";
-  slider.style.backgroundImage = `url(${game.settings.get("daggerheart-fear-tracker", "sliderImage")})`;
+  slider.style.backgroundImage = `url(${game.settings.get("fear-tracker", "sliderImage")})`;
   slider.style.backgroundSize = "contain";
   slider.style.backgroundRepeat = "no-repeat";
   slider.style.width = "1000px"; //1072
@@ -329,11 +329,11 @@ function renderLargeTracker(render = true) {
   slider.style.display = "flex";
   slider.style.cursor = "move";
 
-  const totalPips = game.settings.get("daggerheart-fear-tracker", "maxFearTokens");
-  let leftSideCount = game.settings.get("daggerheart-fear-tracker", "leftSideCount");
+  const totalPips = game.settings.get("fear-tracker", "maxFearTokens");
+  let leftSideCount = game.settings.get("fear-tracker", "leftSideCount");
 
-  const pipInactive = game.settings.get("daggerheart-fear-tracker", "pipInactiveImage");
-  const pipActive = game.settings.get("daggerheart-fear-tracker", "pipActiveImage");
+  const pipInactive = game.settings.get("fear-tracker", "pipInactiveImage");
+  const pipActive = game.settings.get("fear-tracker", "pipActiveImage");
 
   //const pips = [];
   const pipContainer = document.createElement("div");
@@ -387,7 +387,7 @@ function renderLargeTracker(render = true) {
 
   // Add plus and minus buttons (GM only)
   const minus = document.createElement("img");
-  minus.src = "modules/daggerheart-fear-tracker/images/minus.png";
+  minus.src = "modules/fear-tracker/images/minus.png";
   minus.style.width = "30px";
   minus.style.height = "30px";
   minus.style.flex = "0 0 auto";
@@ -399,13 +399,13 @@ function renderLargeTracker(render = true) {
   minus.onclick = () => { //addEventListener("click", () => {
     if (!isGM || leftSideCount >= totalPips) return;
     leftSideCount++;
-    game.settings.set("daggerheart-fear-tracker", "leftSideCount", leftSideCount);
+    game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
     updatePips(leftSideCount);
-    game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
+    game.socket.emit("module.fear-tracker", { type: "updatePips", leftSideCount });
   };
 
   const plus = document.createElement("img");
-  plus.src = "modules/daggerheart-fear-tracker/images/plus.png";
+  plus.src = "modules/fear-tracker/images/plus.png";
   plus.style.width = "30px";
   plus.style.height = "30px";
   plus.style.flex = "0 0 auto";
@@ -417,14 +417,14 @@ function renderLargeTracker(render = true) {
   plus.onclick = () => {
     if (!isGM || leftSideCount <= 0) return;
     leftSideCount--;
-    game.settings.set("daggerheart-fear-tracker", "leftSideCount", leftSideCount);
+    game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
     updatePips(leftSideCount);
-    game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
+    game.socket.emit("module.fear-tracker", { type: "updatePips", leftSideCount });
   };
 
   // Add visibility toggle button (GM only)
   const eye = document.createElement("i");
-  eye.className = game.settings.get("daggerheart-fear-tracker", "barVisible") ? "fas fa-eye" : "fas fa-eye-slash";
+  eye.className = game.settings.get("fear-tracker", "barVisible") ? "fas fa-eye" : "fas fa-eye-slash";
   eye.style.cursor = "pointer";
   eye.style.fontSize = "24px";
   eye.style.color = "white";
@@ -432,13 +432,13 @@ function renderLargeTracker(render = true) {
   eye.style.flex = "0 0 auto";
   eye.onclick = () => {
     if (!isGM) return;
-    const current = game.settings.get("daggerheart-fear-tracker", "barVisible");
+    const current = game.settings.get("fear-tracker", "barVisible");
     const newState = !current;
     //console.log("slider was ", current, ". Just set to ", newState);
-    game.settings.set("daggerheart-fear-tracker", "barVisible", newState);
+    game.settings.set("fear-tracker", "barVisible", newState);
     container.style.opacity = newState ? "1" : "0.5";
     eye.className = newState ? "fas fa-eye" : "fas fa-eye-slash";
-    game.socket.emit("module.daggerheart-fear-tracker", { type: "toggleVisibility" });
+    game.socket.emit("module.fear-tracker", { type: "toggleVisibility" });
   };
 
   // Populate everything
@@ -450,7 +450,7 @@ function renderLargeTracker(render = true) {
   container.appendChild(sliderWrapper);
 
   // reapply position
-  //const pos = game.settings.get("daggerheart-fear-tracker", "largeTrackerPosition");
+  //const pos = game.settings.get("fear-tracker", "largeTrackerPosition");
   container.style.top = pos.top; 
   container.style.left = pos.left; 
 
@@ -482,17 +482,17 @@ function renderMiniTracker() {
   tracker.style.gap = "6px";
   tracker.draggable = true;
 
-  leftSideCount = game.settings.get("daggerheart-fear-tracker", "leftSideCount");
-  const pipChar = game.settings.get("daggerheart-fear-tracker", "miniPipCharacter");
-  const activeColor = game.settings.get("daggerheart-fear-tracker", "miniColorActive");
-  const inactiveColor = game.settings.get("daggerheart-fear-tracker", "miniColorInactive");
-  const totalPips = game.settings.get("daggerheart-fear-tracker", "maxFearTokens");
+  leftSideCount = game.settings.get("fear-tracker", "leftSideCount");
+  const pipChar = game.settings.get("fear-tracker", "miniPipCharacter");
+  const activeColor = game.settings.get("fear-tracker", "miniColorActive");
+  const inactiveColor = game.settings.get("fear-tracker", "miniColorInactive");
+  const totalPips = game.settings.get("fear-tracker", "maxFearTokens");
   const activeCount = totalPips - leftSideCount;
 
   // minus button (GM only)
   if (isGM) {
     const minus = document.createElement("img");
-    minus.src = "modules/daggerheart-fear-tracker/images/minus.png";
+    minus.src = "modules/fear-tracker/images/minus.png";
     minus.style.width = "16px";
     minus.style.height = "16px";
     minus.style.cursor = "pointer";
@@ -500,9 +500,9 @@ function renderMiniTracker() {
       console.log("mini tracker minus click!");
       if (leftSideCount < totalPips) {
         leftSideCount++;
-        game.settings.set("daggerheart-fear-tracker", "leftSideCount", leftSideCount);
+        game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
         updatePips(leftSideCount);
-        game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
+        game.socket.emit("module.fear-tracker", { type: "updatePips", leftSideCount });
       }
     };
     tracker.appendChild(minus);
@@ -524,7 +524,7 @@ function renderMiniTracker() {
   // plus button (GM only)
   if (isGM) {
     const plus = document.createElement("img");
-    plus.src = "modules/daggerheart-fear-tracker/images/plus.png";
+    plus.src = "modules/fear-tracker/images/plus.png";
     plus.style.width = "16px";
     plus.style.height = "16px";
     plus.style.cursor = "pointer";
@@ -532,16 +532,16 @@ function renderMiniTracker() {
       console.log("mini tracker plus click!");
       if (leftSideCount > 0) {
         leftSideCount--;
-        game.settings.set("daggerheart-fear-tracker", "leftSideCount", leftSideCount);
+        game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
         updatePips(leftSideCount);
-        game.socket.emit("module.daggerheart-fear-tracker", { type: "updatePips", leftSideCount });
+        game.socket.emit("module.fear-tracker", { type: "updatePips", leftSideCount });
       }
     };
     tracker.appendChild(plus);
   }
 
   // Load position
-  const pos = game.settings.get("daggerheart-fear-tracker", "miniTrackerPosition");
+  const pos = game.settings.get("fear-tracker", "miniTrackerPosition");
   tracker.style.top = pos.top; 
   tracker.style.left = pos.left; 
 
@@ -558,14 +558,14 @@ function renderMiniTracker() {
 // Function to update tokens/pips position when GM clicks + and - buttons
 function updatePips(count) {  
   leftSideCount = count;
-  const totalPips = game.settings.get("daggerheart-fear-tracker", "maxFearTokens");
+  const totalPips = game.settings.get("fear-tracker", "maxFearTokens");
   const activeCount = totalPips - leftSideCount;
-  const mode = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+  const mode = game.settings.get("fear-tracker", "trackerSize");
 
   if (mode === "small") {
-    const pipChar = game.settings.get("daggerheart-fear-tracker", "miniPipCharacter");
-    const activeColor = game.settings.get("daggerheart-fear-tracker", "miniColorActive");
-    const inactiveColor = game.settings.get("daggerheart-fear-tracker", "miniColorInactive");
+    const pipChar = game.settings.get("fear-tracker", "miniPipCharacter");
+    const activeColor = game.settings.get("fear-tracker", "miniColorActive");
+    const inactiveColor = game.settings.get("fear-tracker", "miniColorInactive");
       
     const container = document.getElementById("mini-fear-tracker");
     if (!container) return;
@@ -608,14 +608,14 @@ Hooks.once("ready", () => {
   const isGM = game.user.isGM;
 
   // Remove existing slider bar if present
-  const existing = document.getElementById("daggerheart-fear-tracker-container");
+  const existing = document.getElementById("fear-tracker-container");
   if (existing) {
     console.warn("Removing existing slider container to prevent duplication.");
     existing.remove();
   }
 
   // render correct tracker based on client setting
-  const mode = game.settings.get("daggerheart-fear-tracker", "trackerSize");
+  const mode = game.settings.get("fear-tracker", "trackerSize");
   if (mode === "small") {
     console.log("rendering mini tracker");
     renderMiniTracker();
@@ -626,13 +626,13 @@ Hooks.once("ready", () => {
   }
 
   // Listener for updates
-  game.socket.on("module.daggerheart-fear-tracker", (payload) => {
+  game.socket.on("module.fear-tracker", (payload) => {
     //console.log("game.socket.on called for ", game.user.name);
     if (payload.type === "updatePips") {
       updatePips(payload.leftSideCount);
     }
     if (payload.type === "toggleVisibility") {
-      const visible = game.settings.get("daggerheart-fear-tracker", "barVisible");
+      const visible = game.settings.get("fear-tracker", "barVisible");
       //console.log("Setting visibility when slider value is", visible);
       container.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
     }
