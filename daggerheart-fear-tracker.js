@@ -265,7 +265,7 @@ let container = null;
 let pips = [];
 let slider = null;
 
-// Function to update the slider bar's position w/o restart
+// Function to update the slider bar's position w/o restart (can't this be in onChange? ...nah, forget it, it's going to be windowed soon anyway)
 function updatePosition() {
   const position = game.settings.get("daggerheart-fear-tracker", "barPosition");
   if (!container) return;
@@ -280,11 +280,13 @@ function setupDrag(tracker) {
   let offset = { x: 0, y: 0 };
 
   function onMouseMove(event) {
+    event.preventDefault();
     tracker.style.left = `${event.clientX - offset.x}px`;
     tracker.style.top = `${event.clientY - offset.y}px`;
   }
 
-  function onMouseUp(event) {
+  function onMouseUp(event) { // MouseUp
+    event.preventDefault();
     window.removeEventListener("mousemove", onMouseMove);
     window.removeEventListener("mouseup", onMouseUp);
     // Save position to settings
@@ -292,6 +294,7 @@ function setupDrag(tracker) {
   }
 
   function onMouseDown(event) {
+    event.preventDefault();
     offset = {
       x: event.clientX - tracker.offsetLeft,
       y: event.clientY - tracker.offsetTop
