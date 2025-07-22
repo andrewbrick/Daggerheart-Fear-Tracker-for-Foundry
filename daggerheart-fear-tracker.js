@@ -67,7 +67,7 @@ Hooks.once("init", () => {
     hint: "Change the color of the active pips (fear) in the mini tracker. Applies only to you.",
     scope: "client",
     config: true,
-    type: String, //new game.colorPicker.ColorPickerField(),
+    type: new game.colorPicker.ColorPickerField(),
     default: "#A02B93",
     onChange: () => {
       const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
@@ -92,7 +92,7 @@ Hooks.once("init", () => {
     hint: "Change the color of the inactive pips (not fear) in the mini tracker. Applies only to you.",
     scope: "client",
     config: true,
-    type: String,
+    type: new game.colorPicker.ColorPickerField(),
     default: "#C4C4C4",
     onChange: () => {
       const size = game.settings.get("daggerheart-fear-tracker", "trackerSize");
@@ -129,8 +129,8 @@ Hooks.once("init", () => {
   });
   
   game.settings.register("daggerheart-fear-tracker", "sliderImage", {
-    name: "Slider Bar Image",
-    hint: "Path to the slider bar PNG image (1000 x 30).",
+    name: "GM: Slider Bar Image",
+    hint: "Path to the slider bar PNG image (1000 x 30). Applies to world.",
     scope: "world",
     config: true,
     type: String,
@@ -139,8 +139,8 @@ Hooks.once("init", () => {
   });
 
   game.settings.register("daggerheart-fear-tracker", "pipActiveImage", {
-    name: "Activated Pip Image",
-    hint: "Path to the activated pip PNG image (300 x 457).",
+    name: "GM: Activated Pip Image",
+    hint: "Path to the activated pip PNG image (300 x 457). Applies to world.",
     scope: "world",
     config: true,
     type: String,
@@ -149,8 +149,8 @@ Hooks.once("init", () => {
   });
 
   game.settings.register("daggerheart-fear-tracker", "pipInactiveImage", {
-    name: "Deactivated Pip Image",
-    hint: "Path to the deactivated pip PNG image. (300 x 457)",
+    name: "GM: Inactive Pip Image",
+    hint: "Path to the inactive pip PNG image (300 x 457). Applies to world.",
     scope: "world",
     config: true,
     type: String,
@@ -193,8 +193,8 @@ Hooks.once("init", () => {
 
   // Option to change the number of fear tokens
   game.settings.register("daggerheart-fear-tracker", "maxFearTokens", {
-    name: "Maximum number of fear tokens",
-    hint: "This determines how many total tokens appear in the slider. Changing the number will reset the slider bar. RESTART REQURIED.",
+    name: "GM: Maximum number of fear tokens",
+    hint: "This determines how many total tokens appear in the slider. To the extent possible, the current amount of fear will be preserved when this number is changed.",
     scope: "world",
     config: true,
     default: 12,
