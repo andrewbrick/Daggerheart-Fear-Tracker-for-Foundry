@@ -188,7 +188,7 @@ Hooks.once("init", () => {
     type: Number,
     default: 0,
     onChange: (value) => {
-      console.log("activeFear changed to", value);
+      //console.log("activeFear changed to", value);
     }
   });
 
@@ -206,15 +206,15 @@ Hooks.once("init", () => {
       step: 1,
     },
     onChange: (value) => {
-      console.log("value", value);
+      //console.log("value", value);
       currentFear = game.settings.get("fear-tracker", "activeFear");
       if (currentFear > value) { // user has reduced the max number of tokens
         currentFear = value;
       } 
       
-      console.log("else activeFear changed to", currentFear);
+      //console.log("else activeFear changed to", currentFear);
       newLeftSide = game.settings.get("fear-tracker", "maxFearTokens") - currentFear;
-      console.log("leftSideCount changed to", newLeftSide);
+      //console.log("leftSideCount changed to", newLeftSide);
       
       const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
@@ -288,12 +288,12 @@ function setupDrag(tracker) {
 // Renderer for large tracker
 function renderLargeTracker(render = true) {
 
-  console.log("renderLargeTracker called");
+  //console.log("renderLargeTracker called");
   const isGM = game.user.isGM;
   const mode = game.settings.get("fear-tracker", "trackerSize");
 
   const pos = game.settings.get("fear-tracker", "largeTrackerPosition");
-  console.log("pos", pos);
+  //console.log("pos", pos);
   
   // Create mother container and element containers
   container = document.createElement("div");
@@ -466,7 +466,7 @@ function renderLargeTracker(render = true) {
 // Function to render mini tracker
 function renderMiniTracker() {
 
-  console.log("renderMiniTracker called");
+  //console.log("renderMiniTracker called");
   const isGM = game.user.isGM;
   
   const tracker = document.createElement("div");
@@ -502,7 +502,7 @@ function renderMiniTracker() {
     minus.style.outline = "none";
     minus.style.backgroundColor = "transparent";
     minus.onclick = () => {
-      console.log("mini tracker minus click!");
+      //console.log("mini tracker minus click!");
       if (leftSideCount < totalPips) {
         leftSideCount++;
         game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
@@ -538,7 +538,7 @@ function renderMiniTracker() {
     plus.style.outline = "none";
     plus.style.backgroundColor = "transparent";
     plus.onclick = () => {
-      console.log("mini tracker plus click!");
+      //console.log("mini tracker plus click!");
       if (leftSideCount > 0) {
         leftSideCount--;
         game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
@@ -674,7 +674,4 @@ Hooks.once("ready", () => {
     }
   });
   
-  // Testing
-  //console.log("Fear tracker ready on ", game.user.name);
-
 });
