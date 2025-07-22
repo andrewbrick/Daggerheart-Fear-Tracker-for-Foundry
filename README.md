@@ -1,5 +1,5 @@
 # Fear Tracker for Foundry
-A simple overlay compatible with the Daggerheart game system that tracks GM fear tokens for the Daggerheart game system. Players and GM see a slider bar with tokens. GM can move tokens left (inactive) or right (active) when they gain and use fear. GM can make the bar invisible for everyone. The following things are customizable:
+A simple overlay compatible with the Daggerheart game system that tracks GM fear tokens. Players and GM see a slider bar with tokens. GM can move tokens left (inactive) or right (active) when they gain and use fear. GM can make the bar invisible for everyone. The following things are customizable:
 - use standard (large) or mini tracker (client scope)
 - for the mini tracker:
 -- character used for the pip (client scope)
