@@ -16,9 +16,11 @@
   "url": "https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/",
   "manifest": "https://raw.githubusercontent.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/refs/heads/main/module.json",
   "download": "https://github.com/andrewbrick/Daggerheart-Fear-Tracker-for-Foundry/archive/refs/tags/v0.3.0.zip",
-  "relationships.requires": [{
-    "name": "color-picker",
-    "type": "module",
-    "manifest": "https://raw.githubusercontent.com/Larkinabout/fvtt-color-picker/refs/heads/master/module.json"
-  }]
+  "relationships": {
+    "requires": [{
+      "id": "color-picker",
+      "type": "module",
+      "manifest": "https://raw.githubusercontent.com/Larkinabout/fvtt-color-picker/refs/heads/master/module.json"
+    }]
+  }
 }
