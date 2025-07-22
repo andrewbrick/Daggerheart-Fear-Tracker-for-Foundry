@@ -12,7 +12,7 @@ Hooks.once("init", () => {
     hint: "Choose between Large or Small (windowed mini) version of the tracker. Both versions are draggable and remember their positions on the screen. Applies only to you.",
     scope: "client",
     config: true,
-    type: String,
+    type: new game.colorPicker.ColorPickerField(), //String,
     choices: {
       large: "Large",
       small: "Small",
