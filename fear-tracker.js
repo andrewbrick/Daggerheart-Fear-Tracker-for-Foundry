@@ -7,7 +7,7 @@ Copyright notice: This product includes materials from the Daggerheart System Re
 Hooks.once("init", () => {
 
   // Setting registration / Config setup
-  // mini or large
+  // mini, large, or number
   game.settings.register("fear-tracker", "trackerSize", {
     name: "Fear Tracker Size",
     hint: "Choose between Large or Small (windowed mini) version of the tracker. Both versions are draggable and remember their positions on the screen. Applies only to you.",
@@ -17,21 +17,26 @@ Hooks.once("init", () => {
     choices: {
       large: "Large",
       small: "Small",
+      number: "Number Only",
     },
     default: "large",
     onChange: value => {
       const existingMini = document.getElementById("mini-fear-tracker");
       const existingLarge = document.getElementById("fear-tracker-container");
+      const existingNumber = document.getElementById("number-fear-tracker");
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
+      if (existingNumber) existingNumber.remove();
 
       if (value === "large") {
         container = null;
         pips = [];
         slider = null;
         renderLargeTracker();
-      } else {
+      } else if (value === "small") {
         renderMiniTracker();
+      } else {
+        renderNumberTracker();
       }
     }
   });
@@ -59,16 +64,20 @@ Hooks.once("init", () => {
       const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
       const existingLarge = document.getElementById("fear-tracker-container");
+      const existingNumber = document.getElementById("number-fear-tracker");
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
+      if (existingNumber) existingNumber.remove();
 
       if (size === "large") {
         container = null;
         pips = [];
         slider = null;
         renderLargeTracker();
-      } else {
+      } else if (size === "small") {
         renderMiniTracker();
+      } else {
+        renderNumberTracker();
       }
     }
   });
@@ -76,7 +85,7 @@ Hooks.once("init", () => {
   // mini active pip color
   game.settings.register("fear-tracker", "miniColorActive", {
     name: "Mini Tracker Active Pip Color",
-    hint: "Change the color of the active pips (fear) in the mini tracker. Applies only to you.",
+    hint: "Change the color of the active pips (fear) in the mini tracker and the color of the number in the number-only tracker. Applies only to you.",
     scope: "client",
     config: true,
     type: new game.colorPicker.ColorPickerField(),
@@ -85,16 +94,20 @@ Hooks.once("init", () => {
       const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
       const existingLarge = document.getElementById("fear-tracker-container");
+      const existingNumber = document.getElementById("number-fear-tracker");
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
+      if (existingNumber) existingNumber.remove();
 
       if (size === "large") {
         container = null;
         pips = [];
         slider = null;
         renderLargeTracker();
-      } else {
+      } else if (size === "small") {
         renderMiniTracker();
+      } else {
+        renderNumberTracker();
       }
     }
   });
@@ -110,21 +123,25 @@ Hooks.once("init", () => {
       const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
       const existingLarge = document.getElementById("fear-tracker-container");
+      const existingNumber = document.getElementById("number-fear-tracker");
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
+      if (existingNumber) existingNumber.remove();
 
       if (size === "large") {
         container = null;
         pips = [];
         slider = null;
         renderLargeTracker();
-      } else {
+      } else if (size === "small") {
         renderMiniTracker();
+      } else {
+        renderNumberTracker();
       }
     }
   });
 
-  // keep track of the tracker's position
+  // keep track of the trackers' positions
   game.settings.register("fear-tracker", "miniTrackerPosition", {
     name: "Mini Tracker Position",
     scope: "client",
@@ -139,7 +156,15 @@ Hooks.once("init", () => {
     type: Object,
     default: {top:100, left:100}
   });
-  
+  game.settings.register("fear-tracker", "numberTrackerPosition", {
+    name: "Number Tracker Position",
+    scope: "client",
+    config: false,
+    type: Object,
+    default: {top:100, left:100}
+  });
+
+  // Images for large tracker
   game.settings.register("fear-tracker", "sliderImage", {
     name: "GM: Slider Bar Image",
     hint: "Path to the slider bar PNG image (1000 x 30). Applies to world.",
@@ -149,7 +174,6 @@ Hooks.once("init", () => {
     filePicker: "image",
     default: "modules/fear-tracker/images/slider.png"
   });
-
   game.settings.register("fear-tracker", "pipActiveImage", {
     name: "GM: Activated Pip Image",
     hint: "Path to the activated pip PNG image (300 x 457). Applies to world.",
@@ -159,7 +183,6 @@ Hooks.once("init", () => {
     filePicker: "image",
     default: "modules/fear-tracker/images/pip-active.png"
   });
-
   game.settings.register("fear-tracker", "pipInactiveImage", {
     name: "GM: Inactive Pip Image",
     hint: "Path to the inactive pip PNG image (300 x 457). Applies to world.",
@@ -187,6 +210,7 @@ Hooks.once("init", () => {
     type: Number,
     default: 12,
     onChange: () => {
+      if(!game.user.isGM) return;
       game.settings.set("fear-tracker", "activeFear", game.settings.get("fear-tracker", "maxFearTokens") - game.settings.get("fear-tracker", "leftSideCount"));
     }
   });
@@ -200,6 +224,41 @@ Hooks.once("init", () => {
     default: 0,
     onChange: (value) => {
       //console.log("activeFear changed to", value);
+    }
+  });
+
+  // Number-only tracker number font size
+  game.settings.register("fear-tracker", "ntFontSize", {
+    name: "Number Tracker Font Size",
+    hint: "For use with the number-only tracker, this changes the font size of the number of active fear tokens. Applies only to you.",
+    scope: "client",
+    config: true,
+    type: Number,
+    range: {
+      min: 16,
+      max: 80,
+      step: 2,
+    },
+    default: 60,
+    onChange: () => {
+      const size = game.settings.get("fear-tracker", "trackerSize");
+      const existingMini = document.getElementById("mini-fear-tracker");
+      const existingLarge = document.getElementById("fear-tracker-container");
+      const existingNumber = document.getElementById("number-fear-tracker");
+      if (existingMini) existingMini.remove();
+      if (existingLarge) existingLarge.remove();
+      if (existingNumber) existingNumber.remove();
+
+      if (size === "large") {
+        container = null;
+        pips = [];
+        slider = null;
+        renderLargeTracker();
+      } else if (size === "small") {
+        renderMiniTracker();
+      } else {
+        renderNumberTracker();
+      }
     }
   });
 
@@ -243,17 +302,23 @@ Hooks.once("init", () => {
         ]).then(() => {
           renderLargeTracker();
         });
-      } else {
+      } else if (size === "small") {
         Promise.all([
           game.settings.set("fear-tracker", "activeFear", currentFear),
           game.settings.set("fear-tracker", "leftSideCount", newLeftSide)
         ]).then(() => {
           renderMiniTracker();
         });
+      } else {
+        Promise.all([
+          game.settings.set("fear-tracker", "activeFear", currentFear),
+          game.settings.set("fear-tracker", "leftSideCount", newLeftSide)
+        ]).then(() => {
+          renderNumberTracker();
+        });
       }
-    },
+    }
   });
-
 });
 
 let container = null;
@@ -278,8 +343,10 @@ function setupDrag(tracker) {
     // Save position to settings
     if (size === "small") {
       game.settings.set("fear-tracker", "miniTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
-    } else {
+    } else if (size === "large") {
       game.settings.set("fear-tracker", "largeTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
+    } else { // number-only tracker
+      game.settings.set("fear-tracker", "numberTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
     }
   }
 
@@ -446,7 +513,6 @@ function renderLargeTracker(render = true) {
     if (!isGM) return;
     const current = game.settings.get("fear-tracker", "barVisible");
     const newState = !current;
-    //console.log("slider was ", current, ". Just set to ", newState);
     game.settings.set("fear-tracker", "barVisible", newState);
     container.style.opacity = newState ? "1" : "0.5";
     eye.className = newState ? "fas fa-eye" : "fas fa-eye-slash";
@@ -492,6 +558,7 @@ function renderMiniTracker() {
   tracker.style.display = "flex";
   tracker.style.alignItems = "center";
   tracker.style.gap = "6px";
+  tracker.style.borderRadius = "8px";
   tracker.draggable = true;
   tracker.style.opacity = game.settings.get("fear-tracker", "barVisible") ? "1" : (isGM ? "0.5" : "0");
 
@@ -516,6 +583,7 @@ function renderMiniTracker() {
     minus.onclick = () => {
       //console.log("mini tracker minus click!");
       if (leftSideCount < totalPips) {
+        if (!isGM) return;
         leftSideCount++;
         game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
         updatePips(leftSideCount);
@@ -552,6 +620,7 @@ function renderMiniTracker() {
     plus.onclick = () => {
       //console.log("mini tracker plus click!");
       if (leftSideCount > 0) {
+        if (!isGM) return;
         leftSideCount--;
         game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
         updatePips(leftSideCount);
@@ -598,6 +667,162 @@ function renderMiniTracker() {
 }
 // End mini tracker render function
 
+// Function to render number-only tracker
+function renderNumberTracker() {
+  const isGM = game.user.isGM;
+
+  const numTracker = document.createElement("div");
+  numTracker.id = "number-fear-tracker";
+  numTracker.style.position = "fixed";
+  numTracker.style.background = "rgba(0, 0, 0, 0.75)";
+  numTracker.style.border = "1px solid #555";
+  numTracker.style.borderRadius = "8px";
+  numTracker.style.padding = "5px";
+  numTracker.style.zIndex = 100;
+  numTracker.style.cursor = "move";
+  numTracker.style.display = "flex";
+  numTracker.style.flexDirection = "column";
+  numTracker.style.alignItems = "center";
+  numTracker.style.gap = "6px";
+  numTracker.draggable = true;
+  numTracker.style.opacity = game.settings.get("fear-tracker", "barVisible") ? "1" : (isGM ? "0.5" : "0");
+
+  leftSideCount = game.settings.get("fear-tracker", "leftSideCount");
+  const pipChar = game.settings.get("fear-tracker", "miniPipCharacter");
+  const activeColor = game.settings.get("fear-tracker", "miniColorActive");
+  const inactiveColor = game.settings.get("fear-tracker", "miniColorInactive");
+  const totalPips = game.settings.get("fear-tracker", "maxFearTokens");
+  const activeCount = totalPips - leftSideCount;
+
+  // Header
+  const header = document.createElement("div");
+  header.style.position = "relative";
+  header.style.display = "flex";
+  header.style.justifyContent = "space-between";
+  header.style.alignItems = "center";
+  header.style.marginBottom = "4px";
+
+  const title = document.createElement("div");
+  title.textContent = "Fear";
+  title.style.flex = "1";
+  title.style.textAlign = "center";
+  title.style.fontSize = "16px";
+  title.style.color = "var(--color-text-light-primary)";
+  header.appendChild(title);
+
+  const spacer = document.createElement("div");
+  spacer.style.width = "50px";
+  header.appendChild(spacer);
+
+  if (isGM) {
+    const eye = document.createElement("a");
+    eye.className = game.settings.get("fear-tracker", "barVisible") ? "fas fa-eye" : "fas fa-eye-slash";
+    //eye.style.position = "absolute";
+    eye.marginLeft = "auto";
+    //eye.style.top = "0";
+    //eye.style.right = "0";
+    eye.style.cursor = "pointer";
+    eye.style.fontSize = "16px";
+    eye.style.color = "white";
+    eye.style.marginRight = "2px";
+    eye.style.flex = "0 0 auto";
+    eye.style.marginTop = "2px";
+    eye.onclick = () => {
+      if (!isGM) return;
+      const current = game.settings.get("fear-tracker", "barVisible");
+      const newState = !current;
+      game.settings.set("fear-tracker", "barVisible", newState);
+      numTracker.style.opacity = newState ? "1" : "0.5";
+      eye.className = newState ? "fas fa-eye" : "fas fa-eye-slash";
+      game.socket.emit("module.fear-tracker", { type: "toggleVisibility" });
+    };
+    header.appendChild(eye);
+  }
+  
+  numTracker.appendChild(header);
+
+  // Controls div
+  const controls = document.createElement("div");
+  controls.style.position = "relative";
+  controls.style.display = "flex";
+  controls.style.justifyContent = "space-between";
+  controls.style.alignItems = "center";
+  controls.style.marginBottom = "4px";
+  
+  // minus button (GM only)
+  if (isGM) {
+    const minus = document.createElement("img");
+    minus.src = "modules/fear-tracker/images/minus.png";
+    minus.style.width = "20px";
+    minus.style.height = "20px";
+    minus.style.marginTop = "6px";
+    minus.style.cursor = "pointer";
+    minus.style.border = "none";
+    minus.style.outline = "none";
+    minus.style.backgroundColor = "transparent";
+    minus.onclick = () => {
+      //console.log("mini tracker minus click!");
+      if (leftSideCount < totalPips) {
+        if (!isGM) return;
+        leftSideCount++;
+        game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
+        updatePips(leftSideCount);
+        game.socket.emit("module.fear-tracker", { type: "updatePips", leftSideCount });
+      }
+    };
+    controls.appendChild(minus);
+  }
+
+  // Number
+  const numContainer = document.createElement("div");
+  numContainer.id = "number-fear-tracker-num-cont"
+  fs = game.settings.get("fear-tracker", "ntFontSize");
+  numContainer.style.fontSize = `${fs}px`; //"60px";
+  numContainer.style.color = game.settings.get("fear-tracker", "miniColorActive");
+  numContainer.style.margin = "0 4px";
+  const num = document.createElement("span");
+  num.textContent = activeCount;
+  numContainer.appendChild(num);
+  controls.appendChild(numContainer);
+  
+  // plus button (GM only)
+  if (isGM) {
+    const plus = document.createElement("img");
+    plus.src = "modules/fear-tracker/images/plus.png";
+    plus.style.width = "20px";
+    plus.style.height = "20px";
+    plus.style.marginTop = "6px";
+    plus.style.cursor = "pointer";
+    plus.style.border = "none";
+    plus.style.outline = "none";
+    plus.style.backgroundColor = "transparent";
+    plus.onclick = () => {
+      //console.log("mini tracker plus click!");
+      if (leftSideCount > 0) {
+        if (!isGM) return;
+        leftSideCount--;
+        game.settings.set("fear-tracker", "leftSideCount", leftSideCount);
+        updatePips(leftSideCount);
+        game.socket.emit("module.fear-tracker", { type: "updatePips", leftSideCount });
+      }
+    };
+    controls.appendChild(plus);
+  }
+
+  numTracker.appendChild(controls);
+
+  // Load position
+  const pos = game.settings.get("fear-tracker", "numberTrackerPosition");
+  numTracker.style.top = pos.top; 
+  numTracker.style.left = pos.left; 
+
+  setupDrag(numTracker);
+
+  document.body.appendChild(numTracker);
+
+  updatePips(leftSideCount);
+  
+}
 
 // Function to update tokens/pips position when GM clicks + and - buttons
 function updatePips(count) {  
@@ -626,7 +851,7 @@ function updatePips(count) {
       pip.style.color = i >= leftSideCount ? activeColor : inactiveColor;
       pipWrapper.appendChild(pip);
     }
-  } else {
+  } else if (mode === "large") {
     for (let i = 0; i < totalPips; i++) {
       const pip = pips[i];
       const isActive = i >= leftSideCount;
@@ -644,6 +869,11 @@ function updatePips(count) {
       pip.inactiveImg.style.opacity = isActive ? "0" : "1";
       pip.activeImg.style.opacity = isActive ? "1" : "0";
     }
+  } else { // number-only tracker
+    const container = document.getElementById("number-fear-tracker-num-cont");
+    if (!container) return;
+    container.innerHTML = "";
+    container.innerHTML = activeCount;    
   }
 }
 
@@ -664,9 +894,11 @@ Hooks.once("ready", () => {
     console.log("rendering mini tracker");
     renderMiniTracker();
     //renderLargeTracker(); // but it will be invisible
-  } else { // render large one
+  } else if (mode === "large") { // render large one
     console.log("rendering large tracker");
     renderLargeTracker();
+  } else { // render number-only one
+    renderNumberTracker();
   }
 
   // Listener for updates
@@ -681,8 +913,10 @@ Hooks.once("ready", () => {
       //console.log("Setting visibility when slider value is", visible);
       existingLarge = document.getElementById("fear-tracker-container"); //container.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
       existingMini = document.getElementById("mini-fear-tracker");
+      existingNumber = document.getElementById("number-fear-tracker");
       if (existingLarge) existingLarge.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
       if (existingMini) existingMini.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
+      if (existingNumber) existingNumber.style.opacity = !(visible) ? "1" : (game.user.isGM ? "0.5" : "0");
     }
   });
   
