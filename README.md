@@ -15,6 +15,9 @@ Mini tracker:
 ![Mini Tracker](./screenshots/fear-tracker-2.jpg)
 ![Mini Tracker Demo](./screenshots/fear-tracker-demo-small.gif)
 
+Number-only tracker:
+![Num Tracker](./screenshots/fear-tracker-4.jpg)
+
 Settings Dialog:
 ![Settings](./screenshots/fear-tracker-3.jpg)
 
