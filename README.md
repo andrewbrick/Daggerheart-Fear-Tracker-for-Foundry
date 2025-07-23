@@ -37,4 +37,5 @@ It's my first module. I'm trying. Help appreciated. :)
 
 Feature Roadmap:
 - additional themes
-- cooler animations? 
+- cooler animations?
+- localization?
