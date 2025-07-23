@@ -245,68 +245,6 @@ let container = null;
 let pips = [];
 let slider = null;
 
-// Re-renderer
-function reRender(size = null) {
-  if (!size) {
-    const size = game.settings.get("fear-tracker", "trackerSize");
-  }
-  const existingMini = document.getElementById("mini-fear-tracker");
-  const existingLarge = document.getElementById("fear-tracker-container");
-  const existingNumber = document.getElementById("number-fear-tracker");
-  if (existingMini) existingMini.remove();
-  if (existingLarge) existingLarge.remove();
-  if (existingNumber) existingNumber.remove();
-
-  if (size === "large") {
-    container = null;
-    pips = [];
-    slider = null;
-    renderLargeTracker();
-  } else if (size === "small") {
-    renderMiniTracker();
-  } else {
-    renderNumberTracker();
-  }
-}
-
-// Drag function
-function setupDrag(tracker) {
-  let offset = { x: 0, y: 0 };
-  const size = game.settings.get("fear-tracker", "trackerSize");
-
-  function onMouseMove(event) {
-    event.preventDefault();
-    tracker.style.left = `${event.clientX - offset.x}px`;
-    tracker.style.top = `${event.clientY - offset.y}px`;
-  }
-
-  function onMouseUp(event) { // MouseUp
-    event.preventDefault();
-    window.removeEventListener("mousemove", onMouseMove);
-    window.removeEventListener("mouseup", onMouseUp);
-    // Save position to settings
-    if (size === "small") {
-      game.settings.set("fear-tracker", "miniTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
-    } else if (size === "large") {
-      game.settings.set("fear-tracker", "largeTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
-    } else { // number-only tracker
-      game.settings.set("fear-tracker", "numberTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
-    }
-  }
-
-  function onMouseDown(event) {
-    event.preventDefault();
-    offset = {
-      x: event.clientX - tracker.offsetLeft,
-      y: event.clientY - tracker.offsetTop
-    };
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
-  }
-
-  tracker.addEventListener("mousedown", onMouseDown);
-}
-
 // Renderer for large tracker
 function renderLargeTracker(render = true) {
 
@@ -773,6 +711,70 @@ function renderNumberTracker() {
 
   updatePips(leftSideCount);
   
+}
+
+// Helper functions
+
+// Re-renderer
+function reRender(size = null) {
+  if (!size) {
+    const size = game.settings.get("fear-tracker", "trackerSize");
+  }
+  const existingMini = document.getElementById("mini-fear-tracker");
+  const existingLarge = document.getElementById("fear-tracker-container");
+  const existingNumber = document.getElementById("number-fear-tracker");
+  if (existingMini) existingMini.remove();
+  if (existingLarge) existingLarge.remove();
+  if (existingNumber) existingNumber.remove();
+
+  if (size === "large") {
+    container = null;
+    pips = [];
+    slider = null;
+    renderLargeTracker();
+  } else if (size === "small") {
+    renderMiniTracker();
+  } else {
+    renderNumberTracker();
+  }
+}
+
+// Drag function
+function setupDrag(tracker) {
+  let offset = { x: 0, y: 0 };
+  const size = game.settings.get("fear-tracker", "trackerSize");
+
+  function onMouseMove(event) {
+    event.preventDefault();
+    tracker.style.left = `${event.clientX - offset.x}px`;
+    tracker.style.top = `${event.clientY - offset.y}px`;
+  }
+
+  function onMouseUp(event) { // MouseUp
+    event.preventDefault();
+    window.removeEventListener("mousemove", onMouseMove);
+    window.removeEventListener("mouseup", onMouseUp);
+    // Save position to settings
+    if (size === "small") {
+      game.settings.set("fear-tracker", "miniTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
+    } else if (size === "large") {
+      game.settings.set("fear-tracker", "largeTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
+    } else { // number-only tracker
+      game.settings.set("fear-tracker", "numberTrackerPosition", {top: tracker.style.top, left: tracker.style.left} );
+    }
+  }
+
+  function onMouseDown(event) {
+    event.preventDefault();
+    offset = {
+      x: event.clientX - tracker.offsetLeft,
+      y: event.clientY - tracker.offsetTop
+    };
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+  }
+
+  tracker.addEventListener("mousedown", onMouseDown);
 }
 
 // Function to update tokens/pips position when GM clicks + and - buttons
