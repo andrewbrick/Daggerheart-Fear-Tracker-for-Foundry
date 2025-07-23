@@ -21,23 +21,7 @@ Hooks.once("init", () => {
     },
     default: "large",
     onChange: value => {
-      const existingMini = document.getElementById("mini-fear-tracker");
-      const existingLarge = document.getElementById("fear-tracker-container");
-      const existingNumber = document.getElementById("number-fear-tracker");
-      if (existingMini) existingMini.remove();
-      if (existingLarge) existingLarge.remove();
-      if (existingNumber) existingNumber.remove();
-
-      if (value === "large") {
-        container = null;
-        pips = [];
-        slider = null;
-        renderLargeTracker();
-      } else if (value === "small") {
-        renderMiniTracker();
-      } else {
-        renderNumberTracker();
-      }
+      reRender(value);
     }
   });
 
@@ -60,25 +44,7 @@ Hooks.once("init", () => {
         ui.notifications.warn("You must enter exactly one character. Using only the first character.");
         await game.settings.set("fear-tracker", "miniPipCharacter", firstChar);
       }
-      
-      const size = game.settings.get("fear-tracker", "trackerSize");
-      const existingMini = document.getElementById("mini-fear-tracker");
-      const existingLarge = document.getElementById("fear-tracker-container");
-      const existingNumber = document.getElementById("number-fear-tracker");
-      if (existingMini) existingMini.remove();
-      if (existingLarge) existingLarge.remove();
-      if (existingNumber) existingNumber.remove();
-
-      if (size === "large") {
-        container = null;
-        pips = [];
-        slider = null;
-        renderLargeTracker();
-      } else if (size === "small") {
-        renderMiniTracker();
-      } else {
-        renderNumberTracker();
-      }
+      reRender();
     }
   });
 
@@ -91,24 +57,7 @@ Hooks.once("init", () => {
     type: new game.colorPicker.ColorPickerField(),
     default: "#A02B93",
     onChange: () => {
-      const size = game.settings.get("fear-tracker", "trackerSize");
-      const existingMini = document.getElementById("mini-fear-tracker");
-      const existingLarge = document.getElementById("fear-tracker-container");
-      const existingNumber = document.getElementById("number-fear-tracker");
-      if (existingMini) existingMini.remove();
-      if (existingLarge) existingLarge.remove();
-      if (existingNumber) existingNumber.remove();
-
-      if (size === "large") {
-        container = null;
-        pips = [];
-        slider = null;
-        renderLargeTracker();
-      } else if (size === "small") {
-        renderMiniTracker();
-      } else {
-        renderNumberTracker();
-      }
+      reRender();
     }
   });
   // mini inactive pip color
@@ -120,24 +69,7 @@ Hooks.once("init", () => {
     type: new game.colorPicker.ColorPickerField(),
     default: "#C4C4C4",
     onChange: () => {
-      const size = game.settings.get("fear-tracker", "trackerSize");
-      const existingMini = document.getElementById("mini-fear-tracker");
-      const existingLarge = document.getElementById("fear-tracker-container");
-      const existingNumber = document.getElementById("number-fear-tracker");
-      if (existingMini) existingMini.remove();
-      if (existingLarge) existingLarge.remove();
-      if (existingNumber) existingNumber.remove();
-
-      if (size === "large") {
-        container = null;
-        pips = [];
-        slider = null;
-        renderLargeTracker();
-      } else if (size === "small") {
-        renderMiniTracker();
-      } else {
-        renderNumberTracker();
-      }
+      reRender();
     }
   });
 
@@ -241,24 +173,7 @@ Hooks.once("init", () => {
     },
     default: 60,
     onChange: () => {
-      const size = game.settings.get("fear-tracker", "trackerSize");
-      const existingMini = document.getElementById("mini-fear-tracker");
-      const existingLarge = document.getElementById("fear-tracker-container");
-      const existingNumber = document.getElementById("number-fear-tracker");
-      if (existingMini) existingMini.remove();
-      if (existingLarge) existingLarge.remove();
-      if (existingNumber) existingNumber.remove();
-
-      if (size === "large") {
-        container = null;
-        pips = [];
-        slider = null;
-        renderLargeTracker();
-      } else if (size === "small") {
-        renderMiniTracker();
-      } else {
-        renderNumberTracker();
-      }
+      reRender();
     }
   });
 
@@ -326,6 +241,30 @@ Hooks.once("init", () => {
 let container = null;
 let pips = [];
 let slider = null;
+
+// Re-renderer
+function reRender(size = null) {
+  if (!size) {
+    const size = game.settings.get("fear-tracker", "trackerSize");
+  }
+  const existingMini = document.getElementById("mini-fear-tracker");
+  const existingLarge = document.getElementById("fear-tracker-container");
+  const existingNumber = document.getElementById("number-fear-tracker");
+  if (existingMini) existingMini.remove();
+  if (existingLarge) existingLarge.remove();
+  if (existingNumber) existingNumber.remove();
+
+  if (size === "large") {
+    container = null;
+    pips = [];
+    slider = null;
+    renderLargeTracker();
+  } else if (size === "small") {
+    renderMiniTracker();
+  } else {
+    renderNumberTracker();
+  }
+}
 
 // Drag function
 function setupDrag(tracker) {
