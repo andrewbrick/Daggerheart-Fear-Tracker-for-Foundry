@@ -688,7 +688,7 @@ function renderNumberTracker() {
   numTracker.style.gap = "6px";
   numTracker.draggable = true;
   numTracker.style.opacity = game.settings.get("fear-tracker", "barVisible") ? "1" : (isGM ? "0.5" : "0");
-
+  
   leftSideCount = game.settings.get("fear-tracker", "leftSideCount");
   const pipChar = game.settings.get("fear-tracker", "miniPipCharacter");
   const activeColor = game.settings.get("fear-tracker", "miniColorActive");
@@ -703,11 +703,12 @@ function renderNumberTracker() {
   header.style.justifyContent = "space-between";
   header.style.alignItems = "center";
   header.style.marginBottom = "4px";
+  header.style.width = "100%";
 
   const title = document.createElement("div");
   title.textContent = "Fear";
   title.style.flex = "1";
-  title.style.textAlign = "center";
+  title.style.textAlign = "left";
   title.style.fontSize = "16px";
   title.style.color = "var(--color-text-light-primary)";
   header.appendChild(title);
@@ -778,11 +779,17 @@ function renderNumberTracker() {
   // Number
   const numContainer = document.createElement("div");
   numContainer.id = "number-fear-tracker-num-cont"
-  fs = game.settings.get("fear-tracker", "ntFontSize");
+  const fs = game.settings.get("fear-tracker", "ntFontSize");
   numContainer.style.fontSize = `${fs}px`; //"60px";
   numContainer.style.color = game.settings.get("fear-tracker", "miniColorActive");
   numContainer.style.margin = "0 4px";
+  numContainer.style.minWidth = `${fs * 1.5}px`;
+  numContainer.style.display = "flex";
+  numContainer.style.flexShrink = "0";
+  numContainer.style.justifyContent = "center";
+  numContainer.style.alignItems = "center";
   const num = document.createElement("span");
+  // set a fixed width based on font size
   num.textContent = activeCount;
   numContainer.appendChild(num);
   controls.appendChild(numContainer);
