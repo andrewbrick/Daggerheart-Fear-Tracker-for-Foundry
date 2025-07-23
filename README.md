@@ -9,6 +9,8 @@ A simple overlay compatible with the Daggerheart game system that tracks GM fear
 - set max number of fear tokens (GM only)
 - images used for standard version slider bar and tokens (GM only)
 
+This module has been tested only in Chrome.
+
 Standard (large) tracker:
 ![Large Tracker](./screenshots/fear-tracker-1.jpg)
 ![Large Tracker Demo](/screenshots/fear-tracker-demo-large.gif)
@@ -34,6 +36,5 @@ Issues:
 It's my first module. I'm trying. Help appreciated. :)
 
 Feature Roadmap:
-- number-only version
 - additional themes
 - cooler animations? 
