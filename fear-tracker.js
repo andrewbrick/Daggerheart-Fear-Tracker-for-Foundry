@@ -50,7 +50,7 @@ Hooks.once("init", () => {
 
   // mini active pip color
   game.settings.register("fear-tracker", "miniColorActive", {
-    name: "Mini Tracker Active Pip Color",
+    name: "Mini Tracker Active Pip / Number-only Tracker Color",
     hint: "Change the color of the active pips (fear) in the mini tracker and the color of the number in the number-only tracker. Applies only to you.",
     scope: "client",
     config: true,
@@ -123,40 +123,6 @@ Hooks.once("init", () => {
     type: String,
     filePicker: "image",
     default: "modules/fear-tracker/images/pip-inactive.png"
-  });
-
-  // Slider visibility
-  game.settings.register("fear-tracker", "barVisible", {
-    name: "Slider Bar Visible",
-    scope: "world",
-    config: false,
-    type: Boolean,
-    default: true
-  });
-
-  // Init for pip counter
-  game.settings.register("fear-tracker", "leftSideCount", {
-    name: "Pip Count Left Side",
-    scope: "world",
-    config: false,
-    type: Number,
-    default: 12,
-    onChange: () => {
-      if(!game.user.isGM) return;
-      game.settings.set("fear-tracker", "activeFear", game.settings.get("fear-tracker", "maxFearTokens") - game.settings.get("fear-tracker", "leftSideCount"));
-    }
-  });
-
-  // Init for fear token number (used only for changing total number of tokens)
-  game.settings.register("fear-tracker", "activeFear", {
-    name: "Active Fear",
-    scope: "world",
-    config: false,
-    type: Number,
-    default: 0,
-    onChange: (value) => {
-      //console.log("activeFear changed to", value);
-    }
   });
 
   // Number-only tracker number font size
@@ -236,6 +202,43 @@ Hooks.once("init", () => {
       }
     }
   });
+
+  // Non-configurable stuff
+  
+  // Slider visibility
+  game.settings.register("fear-tracker", "barVisible", {
+    name: "Slider Bar Visible",
+    scope: "world",
+    config: false,
+    type: Boolean,
+    default: true
+  });
+
+  // Init for pip counter
+  game.settings.register("fear-tracker", "leftSideCount", {
+    name: "Pip Count Left Side",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 12,
+    onChange: () => {
+      if(!game.user.isGM) return;
+      game.settings.set("fear-tracker", "activeFear", game.settings.get("fear-tracker", "maxFearTokens") - game.settings.get("fear-tracker", "leftSideCount"));
+    }
+  });
+
+  // Init for fear token number (used only for changing total number of tokens)
+  game.settings.register("fear-tracker", "activeFear", {
+    name: "Active Fear",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0,
+    onChange: (value) => {
+      //console.log("activeFear changed to", value);
+    }
+  });
+  
 });
 
 let container = null;
