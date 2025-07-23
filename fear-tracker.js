@@ -285,12 +285,14 @@ Hooks.once("init", () => {
       //console.log("else activeFear changed to", currentFear);
       newLeftSide = game.settings.get("fear-tracker", "maxFearTokens") - currentFear;
       //console.log("leftSideCount changed to", newLeftSide);
-      
+
       const size = game.settings.get("fear-tracker", "trackerSize");
       const existingMini = document.getElementById("mini-fear-tracker");
       const existingLarge = document.getElementById("fear-tracker-container");
+      const existingNumber = document.getElementById("number-fear-tracker");
       if (existingMini) existingMini.remove();
       if (existingLarge) existingLarge.remove();
+      if (existingNumber) existingNumber.remove();
 
       if (size === "large") {
         container = null;
