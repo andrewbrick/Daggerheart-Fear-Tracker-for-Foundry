@@ -9,7 +9,7 @@ A simple overlay compatible with the Daggerheart game system* that tracks GM fea
 - set max number of fear tokens (GM only)
 - images used for standard version slider bar and tokens (GM only)
 
-* the actual system, not the Daggerheart System being developed for Foundry.
+*the actual system, not the Daggerheart System being developed for Foundry.
 
 This module has been tested only in Chrome.
 
