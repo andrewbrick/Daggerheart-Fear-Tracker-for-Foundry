@@ -2,7 +2,7 @@
   "name": "fear-tracker",
   "id": "fear-tracker",
   "title": "Fear Tracker for Foundry",
-  "description": "Adds a Daggerheart-compatible, GM-controlled, animated slider bar with configurable fear tokens to the UI (including player UIs). Fully responsive and customizable via settings.",
+  "description": "Adds a Daggerheart-compatible, GM-controlled, animated slider bar with configurable fear tokens to the UI (including player UIs). Fully responsive and customizable via settings. https://github.com/andrewbrick/Fear-Tracker-for-Foundry/",
   "version": "0.4.08",
   "compatibility": {
     "minimum": "12",
