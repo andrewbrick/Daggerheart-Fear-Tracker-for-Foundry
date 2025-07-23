@@ -73,27 +73,22 @@ Hooks.once("init", () => {
     }
   });
 
-  // keep track of the trackers' positions
-  game.settings.register("fear-tracker", "miniTrackerPosition", {
-    name: "Mini Tracker Position",
+  // Number-only tracker number font size
+  game.settings.register("fear-tracker", "ntFontSize", {
+    name: "Number Tracker Font Size",
+    hint: "For use with the number-only tracker, this changes the font size of the number of active fear tokens. Applies only to you.",
     scope: "client",
-    config: false,
-    type: Object,
-    default: {top:100, left:100}
-  });
-  game.settings.register("fear-tracker", "largeTrackerPosition", {
-    name: "Large Tracker Position",
-    scope: "client",
-    config: false,
-    type: Object,
-    default: {top:100, left:100}
-  });
-  game.settings.register("fear-tracker", "numberTrackerPosition", {
-    name: "Number Tracker Position",
-    scope: "client",
-    config: false,
-    type: Object,
-    default: {top:100, left:100}
+    config: true,
+    type: Number,
+    range: {
+      min: 16,
+      max: 80,
+      step: 2,
+    },
+    default: 60,
+    onChange: () => {
+      reRender();
+    }
   });
 
   // Images for large tracker
@@ -123,24 +118,6 @@ Hooks.once("init", () => {
     type: String,
     filePicker: "image",
     default: "modules/fear-tracker/images/pip-inactive.png"
-  });
-
-  // Number-only tracker number font size
-  game.settings.register("fear-tracker", "ntFontSize", {
-    name: "Number Tracker Font Size",
-    hint: "For use with the number-only tracker, this changes the font size of the number of active fear tokens. Applies only to you.",
-    scope: "client",
-    config: true,
-    type: Number,
-    range: {
-      min: 16,
-      max: 80,
-      step: 2,
-    },
-    default: 60,
-    onChange: () => {
-      reRender();
-    }
   });
 
   // Option to change the number of fear tokens
@@ -204,6 +181,29 @@ Hooks.once("init", () => {
   });
 
   // Non-configurable stuff
+
+  // keep track of the trackers' positions
+  game.settings.register("fear-tracker", "miniTrackerPosition", {
+    name: "Mini Tracker Position",
+    scope: "client",
+    config: false,
+    type: Object,
+    default: {top:100, left:100}
+  });
+  game.settings.register("fear-tracker", "largeTrackerPosition", {
+    name: "Large Tracker Position",
+    scope: "client",
+    config: false,
+    type: Object,
+    default: {top:100, left:100}
+  });
+  game.settings.register("fear-tracker", "numberTrackerPosition", {
+    name: "Number Tracker Position",
+    scope: "client",
+    config: false,
+    type: Object,
+    default: {top:100, left:100}
+  });
   
   // Slider visibility
   game.settings.register("fear-tracker", "barVisible", {
