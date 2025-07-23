@@ -5,7 +5,7 @@
   "description": "Adds a Daggerheart-compatible, GM-controlled, animated slider bar with configurable fear tokens to the UI (including player UIs). Fully responsive and customizable via settings.",
   "version": "0.4.07",
   "compatibility": {
-    "minimum": "11",
+    "minimum": "12",
     "verified": "12"
   },
   "styles": [],
